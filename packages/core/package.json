@@ -17,7 +17,7 @@
     "lib"
   ],
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "access": "public"
   },
   "repository": {
     "type": "git",
@@ -29,5 +29,5 @@
   "bugs": {
     "url": "https://github.com/syh-micro-build/mb-cli/issues"
   },
-  "gitHead": "5945b14d4a8907de411ecc2f0b0fd2cf4a61ba7b"
+  "gitHead": "93a2f3906fe6c8aa48e51d4254788503f8b46b70"
 }
