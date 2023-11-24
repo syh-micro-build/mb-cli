@@ -28,8 +28,10 @@
   },
   "dependencies": {
     "@mb-cli/log": "file:../../utils/log",
+    "colors": "^1.4.0",
     "import-local": "^3.1.0",
-    "npmlog": "^7.0.1"
+    "npmlog": "^7.0.1",
+    "semver": "^7.5.4"
   },
   "bugs": {
     "url": "https://github.com/syh-micro-build/mb-cli/issues"
