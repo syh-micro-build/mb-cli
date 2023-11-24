@@ -3,11 +3,12 @@
 module.exports = core;
 
 const pkg = require('../package.json')
+const log = require('@mb-cli/log')
 
 function core() {
-  checkPkgVersion()
+  checkPkgVersion();
 }
 
 function checkPkgVersion() {
-  console.log(pkg.version);
+  log.info('cli', pkg.version);
 }
