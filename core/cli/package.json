@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@mb-cli/log": "file:../../utils/log",
+    "@mb-cli/get-npm-info": "file:../../utils/get-npm-info",
     "colors": "^1.4.0",
     "dotenv": "^16.3.1",
     "import-local": "^3.1.0",

@@ -15,7 +15,7 @@ const constant = require('./const');
 
 const args = minimist(process.argv.slice(2));
 
-function core() {
+async function core() {
   try {
     checkNodeVersion();
     checkPkgVersion();
@@ -23,9 +23,21 @@ function core() {
     checkUserHome();
     checkOpenDebug();
     checkEnv();
-    log.verbose('debug','你竟然在参数中添加了--debug...')
+    await checkGlobalUpdate();
+    log.verbose('debug', '你竟然在参数中添加了--debug...')
   } catch (error) {
     log.error(error)
+  }
+}
+
+async function checkGlobalUpdate() {
+  const curVersion = pkg.version;
+  const npmName = pkg.name;
+  const { getNpmSemverVersion } = require('@mb-cli/get-npm-info');
+  const lastVersion = await getNpmSemverVersion(curVersion, npmName);
+  if (lastVersion && semver.gt(lastVersion, curVersion)) {
+    log.warn(colors.yellow(`请手动更新 ${npmName}，当前版本：${curVersion}，最新版本：${lastVersion}
+        更新命令：npm install -g ${npmName}`));
   }
 }
 
@@ -43,9 +55,9 @@ function checkEnv() {
 
 function createDefaultRC() {
   if (process.env.CLI_HOME) {
-    process.env.CLI_HOME_PATH = path.join(os.userInfo().homedir,process.env.CLI_HOME);
+    process.env.CLI_HOME_PATH = path.join(os.userInfo().homedir, process.env.CLI_HOME);
   } else {
-    process.env.CLI_HOME_PATH = path.join(os.userInfo().homedir,constant.DEFAULT_CLI_HOME);
+    process.env.CLI_HOME_PATH = path.join(os.userInfo().homedir, constant.DEFAULT_CLI_HOME);
   }
 }
 
@@ -73,5 +85,5 @@ function checkNodeVersion() {
 }
 
 function checkPkgVersion() {
-  log.info('Cli Version', 'v'+pkg.version);
+  log.info('Cli Version', 'v' + pkg.version);
 }
