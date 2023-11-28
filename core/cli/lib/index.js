@@ -5,6 +5,7 @@ module.exports = core;
 const os = require('os');
 const path = require('path');
 const fs = require('fs');
+const commander = require('commander');
 const log = require('@mb-cli/log');
 const semver = require('semver');
 const colors = require('colors/safe');
@@ -14,6 +15,7 @@ const pkg = require('../package.json');
 const constant = require('./const');
 
 const args = minimist(process.argv.slice(2));
+const program = new commander.Command();
 
 async function core() {
   try {
@@ -21,13 +23,40 @@ async function core() {
     checkPkgVersion();
     checkCurUser();
     checkUserHome();
-    checkOpenDebug();
+    // checkOpenDebug();
     checkEnv();
     await checkGlobalUpdate();
-    log.verbose('debug', '你竟然在参数中添加了--debug...')
+    registerCommand();
   } catch (error) {
     log.error(error)
   }
+}
+
+function registerCommand() {
+  program
+    .name(Object.keys(pkg.bin)[0])
+    .usage('<command> [options]')
+    .version(pkg.version)
+    .option('-d, --debug', '是否开启调试模式', false);
+
+  program.on('option:debug', function () {
+    this.opts().debug && (log.level = 'verbose');
+    log.verbose('debug', '你竟然在参数中添加了--debug...')
+  })
+
+  program.on('command:*', function (obj) {
+    const availableCommands = program.commands.map(cmd => cmd.name());
+    console.log(colors.red('未知的命令：' + obj[0]));
+    console.log(colors.red('可用命令：' + availableCommands.join(',')));
+  })
+
+  if (program.args && program.args.length < 1) {
+    console.log();
+    program.outputHelp();
+    console.log();
+  }
+
+  program.parse(process.argv);
 }
 
 async function checkGlobalUpdate() {
