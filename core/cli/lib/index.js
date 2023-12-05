@@ -6,26 +6,20 @@ const os = require('os');
 const path = require('path');
 const fs = require('fs');
 const commander = require('commander');
-const log = require('@mb-cli/log');
 const semver = require('semver');
 const colors = require('colors/safe');
-const minimist = require('minimist');
+
+const log = require('@mb-cli/log');
+const init = require('@mb-cli/init');
 
 const pkg = require('../package.json');
 const constant = require('./const');
 
-const args = minimist(process.argv.slice(2));
 const program = new commander.Command();
 
 async function core() {
   try {
-    checkNodeVersion();
-    checkPkgVersion();
-    checkCurUser();
-    checkUserHome();
-    // checkOpenDebug();
-    checkEnv();
-    await checkGlobalUpdate();
+    await prepare();
     registerCommand();
   } catch (error) {
     log.error(error)
@@ -37,26 +31,41 @@ function registerCommand() {
     .name(Object.keys(pkg.bin)[0])
     .usage('<command> [options]')
     .version(pkg.version)
-    .option('-d, --debug', '是否开启调试模式', false);
+    .option('-d, --debug', '是否开启调试模式', false)
+    .option('-tp, --targetPath <targetPath>', '是否指定本地调试路径', '');
+
+  program
+    .command('init [projectName]')
+    .description('初始化项目')
+    .option('-f, --force', '是否强制初始化项目')
+    .action(init);
 
   program.on('option:debug', function () {
     this.opts().debug && (log.level = 'verbose');
     log.verbose('debug', '你竟然在参数中添加了--debug...')
   })
 
+  program.on('option:targetPath', function (targetPath) {
+    process.env.CLI_TARGET_PATH = targetPath;
+  })
+
   program.on('command:*', function (obj) {
     const availableCommands = program.commands.map(cmd => cmd.name());
     console.log(colors.red('未知的命令：' + obj[0]));
     console.log(colors.red('可用命令：' + availableCommands.join(',')));
+    program.outputHelp();
   })
 
-  if (program.args && program.args.length < 1) {
-    console.log();
-    program.outputHelp();
-    console.log();
-  }
-
   program.parse(process.argv);
+}
+
+async function prepare() {
+  checkNodeVersion();
+  checkPkgVersion();
+  checkCurUser();
+  checkUserHome();
+  checkEnv();
+  await checkGlobalUpdate();
 }
 
 async function checkGlobalUpdate() {
@@ -79,7 +88,6 @@ function checkEnv() {
     });
   }
   createDefaultRC();
-  log.verbose('MB RC', process.env.CLI_HOME_PATH);
 }
 
 function createDefaultRC() {
@@ -87,12 +95,6 @@ function createDefaultRC() {
     process.env.CLI_HOME_PATH = path.join(os.userInfo().homedir, process.env.CLI_HOME);
   } else {
     process.env.CLI_HOME_PATH = path.join(os.userInfo().homedir, constant.DEFAULT_CLI_HOME);
-  }
-}
-
-function checkOpenDebug() {
-  if (args.debug) {
-    log.level = 'verbose'
   }
 }
 
