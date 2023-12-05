@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@mb-cli/get-npm-info": "file:../../utils/get-npm-info",
+    "@mb-cli/exec": "file:../exec",
     "@mb-cli/log": "file:../../utils/log",
     "@mb-cli/init": "file:../../commands/init",
     "colors": "^1.4.0",

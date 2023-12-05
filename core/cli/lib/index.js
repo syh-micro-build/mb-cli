@@ -11,6 +11,7 @@ const colors = require('colors/safe');
 
 const log = require('@mb-cli/log');
 const init = require('@mb-cli/init');
+const exec = require('@mb-cli/exec');
 
 const pkg = require('../package.json');
 const constant = require('./const');
@@ -38,7 +39,7 @@ function registerCommand() {
     .command('init [projectName]')
     .description('初始化项目')
     .option('-f, --force', '是否强制初始化项目')
-    .action(init);
+    .action(exec);
 
   program.on('option:debug', function () {
     this.opts().debug && (log.level = 'verbose');
