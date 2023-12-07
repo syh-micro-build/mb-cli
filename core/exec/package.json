@@ -26,6 +26,10 @@
   "scripts": {
     "test": "node ./__tests__/@mb-cli/exec.test.js"
   },
+  "dependencies": {
+    "@mb-cli/Package": "file:../../models/package",
+    "@mb-cli/log": "file:../../utils/log"
+  },
   "bugs": {
     "url": "https://github.com/syh-micro-build/mb-cli/issues"
   }
