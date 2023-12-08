@@ -23,7 +23,10 @@ async function core() {
     await prepare();
     registerCommand();
   } catch (error) {
-    log.error(error)
+    if (program.opts().debug) {
+      return console.error(error);
+    }
+    log.error(error);
   }
 }
 
@@ -43,7 +46,7 @@ function registerCommand() {
 
   program.on('option:debug', function () {
     this.opts().debug && (log.level = 'verbose');
-    log.verbose('debug', '你竟然在参数中添加了--debug...')
+    log.verbose('debug', colors.yellow('调试模式已开启！'))
   })
 
   program.on('option:targetPath', function (targetPath) {
