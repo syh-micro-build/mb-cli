@@ -24,7 +24,9 @@
     "test": "node ./__tests__/@mb-cli/package.test.js"
   },
   "dependencies": {
-    "@mb-cli/utils": "file:../../utils/utils"
+    "@mb-cli/utils": "file:../../utils/utils",
+    "@mb-cli/format-path": "file:../../utils/format-path",
+    "pkg-dir": "^5.0.0"
   },
   "bugs": {
     "url": "https://github.com/syh-micro-build/mb-cli/issues"
