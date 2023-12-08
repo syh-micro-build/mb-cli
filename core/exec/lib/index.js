@@ -1,5 +1,7 @@
 'use strict';
 
+const path = require('path');
+
 const Package = require('@mb-cli/Package');
 const log = require('@mb-cli/log');
 
@@ -7,12 +9,13 @@ const SETTINGS = {
   init: '@mb-cli/init'
 }
 
-function exec() {
+const CACHE_DIR = 'dependencies';
+
+async function exec() {
+  let storeDir = '';
+  let pkg;
   let targetPath = process.env.CLI_TARGET_PATH;
   const homePath = process.env.CLI_HOME_PATH;
-
-  log.verbose('targetPath',targetPath)
-  log.verbose('homePath',homePath)
 
   const cmdObj = arguments[arguments.length - 1];
   const cmdName = cmdObj.name();
@@ -20,15 +23,34 @@ function exec() {
   const packageVersion = 'latest';
 
   if (!targetPath) {
-    targetPath = '';
+    targetPath = path.resolve(homePath, CACHE_DIR);
+    storeDir = path.resolve(targetPath, 'node_modules');
+    pkg = new Package({
+      targetPath,
+      storeDir,
+      packageName,
+      packageVersion
+    });
+    if (pkg.exists()) {
+      
+    } else {
+      await pkg.install();
+    }
+  } else {
+    pkg = new Package({
+      targetPath,
+      packageName,
+      packageVersion
+    });
   }
 
-  const pkg = new Package({
-    targetPath,
-    packageName,
-    packageVersion
-  });
+  log.verbose('targetPath',targetPath);
+  log.verbose('homePath',homePath);
+  log.verbose('storeDir',storeDir);
   console.log(pkg.getRootFilePath());
+
+  const rootFile = pkg.getRootFilePath();
+  rootFile && require(rootFile)(...arguments);
 }
 
 module.exports = exec;
