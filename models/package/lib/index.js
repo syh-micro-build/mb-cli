@@ -1,13 +1,15 @@
 'use strict';
 
 const path = require('path');
+const os = require('os');
 
 const pkgDir = require('pkg-dir').sync;
 const npminstall = require('npminstall');
+const pathExists = require('path-exists').sync;
 
 const { isObject } = require('@mb-cli/utils');
 const formatPath = require('@mb-cli/format-path');
-const { getDefaultRegistry } = require('@mb-cli/get-npm-info');
+const { getDefaultRegistry, getNpmLatestVersion } = require('@mb-cli/get-npm-info');
 
 /**
  * 操作远程包的类
@@ -56,20 +58,48 @@ class Package {
   }
 
   /**
+   * 如果指定包版本为 latest，则转换为最新版本号
+   */
+  async prepare() {
+    if (this.packageVersion === 'latest') {
+      this.packageVersion = await getNpmLatestVersion(this.packageName)
+    }
+  }
+
+  /**
+   * 获取缓存路径（兼容 MacOS 与 Windows）
+   */
+  get cacheFilePath() {
+    if (os.type() === 'Windows_NT') {
+      const cacheFilePathPreFix = this.packageName.replace('/', '+');
+      return path.resolve(this.storeDir, '.store', `${cacheFilePathPreFix}@${this.packageVersion}`);
+    } else if (os.type() === 'Darwin') {  
+      const cacheFilePathPreFix = this.packageName.replace('/', '_');
+      return path.resolve(this.storeDir, `_${cacheFilePathPreFix}@${this.packageVersion}@${this.packageName}`);
+    }
+  }
+
+  /**
    * 判断当前 package 是否存在
    */
-  exists() {
-
+  async exists() {
+    if (this.storeDir) {
+      await this.prepare();
+      return pathExists(this.cacheFilePath)
+    } else {
+     return pathExists(this.targetPath);
+    }
   }
 
   /**
    * 安装 package
    */
-  install() {
+  async install() {
+    await this.prepare();
     return npminstall({
       root: this.targetPath,
       storeDir: this.storeDir,
-      registry: getDefaultRegistry(true),
+      registry: getDefaultRegistry(false),
       pkgs: [
         {
           name: this.packageName,
