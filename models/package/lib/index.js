@@ -6,6 +6,7 @@ const os = require('os');
 const pkgDir = require('pkg-dir').sync;
 const npminstall = require('npminstall');
 const pathExists = require('path-exists').sync;
+const fse = require('fs-extra');
 
 const { isObject } = require('@mb-cli/utils');
 const formatPath = require('@mb-cli/format-path');
@@ -61,22 +62,28 @@ class Package {
    * 如果指定包版本为 latest，则转换为最新版本号
    */
   async prepare() {
+    if (this.storeDir && !pathExists(this.storeDir)) {
+      fse.mkdirpSync(this.storeDir);
+    }
     if (this.packageVersion === 'latest') {
       this.packageVersion = await getNpmLatestVersion(this.packageName)
     }
   }
 
   /**
-   * 获取缓存路径（兼容 MacOS 与 Windows）
+   * 获取当前 npm 包缓存路径（兼容 MacOS 与 Windows）
+   * @param {string} packageVersion 当前 npm 包特定版本号
+   * @returns 当前 npm 包特定/默认版本缓存路径
    */
-  get cacheFilePath() {
+  getCacheFilePath(packageVersion = '') {
     if (os.type() === 'Windows_NT') {
       const cacheFilePathPreFix = this.packageName.replace('/', '+');
-      return path.resolve(this.storeDir, '.store', `${cacheFilePathPreFix}@${this.packageVersion}`);
+      return path.resolve(this.storeDir, '.store', `${cacheFilePathPreFix}@${packageVersion || this.packageVersion}`);
     } else if (os.type() === 'Darwin') {  
       const cacheFilePathPreFix = this.packageName.replace('/', '_');
-      return path.resolve(this.storeDir, `_${cacheFilePathPreFix}@${this.packageVersion}@${this.packageName}`);
+      return path.resolve(this.storeDir, `_${cacheFilePathPreFix}@${packageVersion || this.packageVersion}@${this.packageName}`);
     }
+    return null;
   }
 
   /**
@@ -85,7 +92,7 @@ class Package {
   async exists() {
     if (this.storeDir) {
       await this.prepare();
-      return pathExists(this.cacheFilePath)
+      return pathExists(this.getCacheFilePath())
     } else {
      return pathExists(this.targetPath);
     }
@@ -112,8 +119,24 @@ class Package {
   /**
    * 更新 package
    */
-  update() {
-
+  async update() {
+    await this.prepare();
+    const latestPackageVersion = await getNpmLatestVersion(this.packageName);
+    const latestFilePath = this.getCacheFilePath(latestPackageVersion);
+    if (!pathExists(latestFilePath)) {
+      await npminstall({
+        root: this.targetPath,
+        storeDir: this.storeDir,
+        registry: getDefaultRegistry(false),
+        pkgs: [
+          {
+            name: this.packageName,
+            version: latestPackageVersion,
+          }
+        ],
+      });
+      this.packageVersion = latestPackageVersion;
+    }
   }
 
   /**
