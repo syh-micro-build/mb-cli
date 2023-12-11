@@ -10,7 +10,7 @@ const semver = require('semver');
  * @param {string} registry npm 源
  * @returns npm 包信息
  */
-function getNpmInfo(npmName, registry) {
+function getNpmInfo(npmName, registry = '') {
   if (!npmName) {
     return null;
   }
@@ -41,7 +41,7 @@ function getDefaultRegistry(isOriginal = false) {
  * @param {string} registry npm 源
  * @returns 版本号集合
  */
-async function getNpmVersions(npmName, registry) {
+async function getNpmVersions(npmName, registry = '') {
   const data = await getNpmInfo(npmName, registry);
   if (data) {
     return Object.keys(data.versions);
@@ -59,17 +59,17 @@ async function getNpmVersions(npmName, registry) {
 function getSemverVersions(baseVersion, versions) {
   return versions
     .filter(version => semver.satisfies(version, `^${baseVersion}||~${baseVersion}`))
-    .sort((a, b) => semver.gt(b, a));
+    .sort((a, b) => semver.compare(b, a));
 }
 
 /**
- * 获取指定 npm 包的最新版本号
+ * 获取符合指定 npm 包依赖规则的最新版本号
  * @param {string} baseVersion 基础版本（package.json 中显示的版本）
  * @param {string} npmName npm 包名称
  * @param {string} registry npm 源
- * @returns npm 仓库中指定包的最新版本号
+ * @returns npm 仓库中指定包符合依赖规则的最新版本号
  */
-async function getNpmSemverVersion(baseVersion, npmName, registry) {
+async function getNpmSemverVersion(baseVersion, npmName, registry = '') {
   const versions = await getNpmVersions(npmName, registry);
   const newVersions = getSemverVersions(baseVersion, versions);
   if (newVersions && newVersions.length > 0) {
@@ -78,9 +78,22 @@ async function getNpmSemverVersion(baseVersion, npmName, registry) {
   return null;
 }
 
+/**
+ * 获取指定 npm 包的最新版本号
+ * @param {string} npmName npm 包名称
+ * @param {string} registry npm 源
+ * @returns npm 仓库中指定包的最新版本号
+ */
+async function getNpmLatestVersion(npmName, registry = '') {
+  const versions = await getNpmVersions(npmName, registry);
+  if (versions) return versions.sort((a, b) => semver.compare(b, a))[0];
+  return null;
+}
+
 module.exports = {
   getNpmInfo,
   getNpmVersions,
   getNpmSemverVersion,
-  getDefaultRegistry
+  getDefaultRegistry,
+  getNpmLatestVersion
 }
