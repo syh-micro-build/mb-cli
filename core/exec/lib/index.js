@@ -49,7 +49,13 @@ async function exec() {
   log.verbose('storeDir',storeDir);
 
   const rootFile = pkg.getRootFilePath();
-  rootFile && require(rootFile)(...arguments);
+  if(rootFile) {
+    try {
+      require(rootFile)(...arguments);
+    } catch(e) {
+      log.error(e.message);
+    }
+  }
 }
 
 module.exports = exec;
