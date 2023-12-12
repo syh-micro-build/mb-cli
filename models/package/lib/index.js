@@ -28,8 +28,8 @@ class Package {
    * 构造函数
    * @constructs Package 类的构造函数
    * @param {object} options 初始化参数
-   * @param {string} options.targetPath 远程包安装路径
-   * @param {string} options.storeDir 远程包缓存路径
+   * @param {string} options.targetPath 远程包安装根目录
+   * @param {string} options.storeDir 远程包缓存目录
    * @param {string} options.packageName 远程包名
    * @param {string} options.packageVersion 远程包版本号
    */
@@ -41,11 +41,11 @@ class Package {
       throw new Error('Package 类的实例化参数必须为对象！');
     }
     /**
-     * package 安装路径
+     * package 安装根目录
      */
     this.targetPath = options.targetPath;
     /**
-     * package 缓存路径
+     * package 缓存目录
      */
     this.storeDir = options.storeDir;
     /**
@@ -143,14 +143,22 @@ class Package {
    * 获取入口文件的路径
    */
   getRootFilePath() {
-    const dir = pkgDir(this.targetPath);
-    if (dir) {
-      const pkgFile = require(path.resolve(dir, 'package.json'));
-      if (pkgFile && pkgFile.main) {
-        return formatPath(path.resolve(dir, pkgFile.main));
-      }
+    if (this.storeDir) {
+      return _getRootFile(this.getCacheFilePath());
+    } else {
+      return _getRootFile(this.targetPath);
     }
-    return null;
+
+    function _getRootFile(targetPath) {
+      const dir = pkgDir(targetPath);
+      if (dir) {
+        const pkgFile = require(path.resolve(dir, 'package.json'));
+        if (pkgFile && pkgFile.main) {
+          return formatPath(path.resolve(dir, pkgFile.main));
+        }
+      }
+      return null;
+    }
   }
 }
 
