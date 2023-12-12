@@ -27,7 +27,7 @@
     "test": "node ./__tests__/@mb-cli/exec.test.js"
   },
   "dependencies": {
-    "@mb-cli/Package": "file:../../models/package",
+    "@mb-cli/package": "file:../../models/package",
     "@mb-cli/log": "file:../../utils/log"
   },
   "bugs": {
