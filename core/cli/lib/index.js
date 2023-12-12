@@ -64,7 +64,6 @@ function registerCommand() {
 }
 
 async function prepare() {
-  checkNodeVersion();
   checkPkgVersion();
   checkCurUser();
   checkUserHome();
@@ -108,15 +107,6 @@ function checkUserHome() {
 
 function checkCurUser() {
   log.info('Current User', os.userInfo().username);
-}
-
-function checkNodeVersion() {
-  const curNodeVersion = process.version;
-  const lowestNodeVersion = constant.LOWEST_NODE_VERSION;
-  if (!semver.gte(curNodeVersion, lowestNodeVersion)) {
-    throw new Error(colors.red(`mb-cli 须安装 v${lowestNodeVersion} 以上版本的 NodeJS，当前版本为 ${curNodeVersion}`));
-  }
-  log.info('Node Version', process.version);
 }
 
 function checkPkgVersion() {
