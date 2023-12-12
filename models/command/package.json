@@ -1,0 +1,35 @@
+{
+  "name": "@mb-cli/command",
+  "version": "0.0.2",
+  "description": "mb-cli command",
+  "author": "huishanyi <1342088650@qq.com>",
+  "homepage": "https://github.com/syh-micro-build/mb-cli/tree/main/models/command#readme",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmmirror.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/syh-micro-build/mb-cli.git"
+  },
+  "scripts": {
+    "test": "node ./__tests__/@mb-cli/command.test.js"
+  },
+  "bugs": {
+    "url": "https://github.com/syh-micro-build/mb-cli/issues"
+  },
+  "dependencies": {
+    "@mb-cli/log": "file:../../utils/log",
+    "@mb-cli/utils": "file:../../utils/utils",
+    "colors": "^1.4.0",
+    "semver": "^7.5.4"
+  }
+}
