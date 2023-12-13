@@ -7,7 +7,36 @@ const { isArguments } = require('@mb-cli/utils');
 
 const LOWEST_NODE_VERSION = '18.12.1';
 
+/**
+ * 命令基类
+ * @class
+ * @classdesc
+ * - 初始化参数为 commander action 中函数的形参，参数类型为 Arguments 对象，
+ * 包含 commandArgs（arg1，arg2，arg3...）命令参数、commandOpts 命令选项、commandObj 命令对象
+ * - 拥有内部方法 initArgs、checkNodeVersion、init（子类实现）、exec（子类实现）
+ * @example
+ * // commands/init 初始化命令子项目
+ * 
+ * const Command = require('@mb-cli/command');
+ * 
+ * class InitCommand extends Command {
+ *  init() {}
+ *  exec() {}
+ * }
+ * 
+ * function init(args1, args2..., commandOpts, commandObj) {
+ *  return new InitCommand(arguments);
+ * }
+ * 
+ * exports.InitCommand = InitCommand;
+ * module.exports = init;
+ */
 class Command {
+  /**
+   * 构造函数
+   * @constructs Command 类的构造函数
+   * @param {IArguments} args 初始化参数 args 即为 [args1, args2..., commandOpts, commandObj]
+   */
   constructor(args) {
     if(!args) {
       throw new Error('参数不能为空！');
@@ -28,11 +57,17 @@ class Command {
     });
   }
 
+  /**
+   * 初始化基类参数
+   */
   initArgs() {
     this._cmd = this._argv[this._argv.length - 1];
     this._argv = Array.prototype.slice.call(this._argv, 0, this._argv.length - 1);
   }
 
+  /**
+   * 检查 Node 版本
+   */
   checkNodeVersion() {
     const curNodeVersion = process.version;
     const lowestNodeVersion = LOWEST_NODE_VERSION;
@@ -41,10 +76,16 @@ class Command {
     }
   }
 
+  /**
+   * 由子类实现
+   */
   init() {
     throw new Error('init 必须实现！');
   }
 
+  /**
+   * 由子类实现
+   */
   exec() {
     throw new Error('exec 必须实现！');
   }
