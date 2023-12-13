@@ -11,6 +11,25 @@ const SETTINGS = {
 
 const CACHE_DIR = 'dependencies';
 
+/**
+ * 根据 命令名称 动态执行 对应命令包
+ * 
+ * 参数为 commander action 中函数的形参，参数类型为 Arguments 对象，即为 ...[args1, args2..., commandOpts, commandObj]
+ * 
+ * @example
+ * const commander = require('commander');
+ * 
+ * const { exec } = require('@mb-cli/commander');
+ * 
+ * const program = new commander.Command();
+ * 
+ * program
+ *  .command('init [projectName]')
+ *  .description('初始化项目')
+ *  .option('-f, --force', '是否强制初始化项目')
+ *  .action(exec);  // .action((arg1,cmdOpts,cmdObj) => exec(arg1,cmdOpts,cmdObj))
+ * ...
+ */
 async function exec() {
   let storeDir = '';
   let pkg;
