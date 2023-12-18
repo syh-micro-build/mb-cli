@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const childProcess = require('child_process');
 
 const Package = require('@mb-cli/Package');
 const log = require('@mb-cli/log');
@@ -14,7 +15,7 @@ const CACHE_DIR = 'dependencies';
 /**
  * 根据 命令名称 动态执行 对应命令包
  * 
- * 参数为 commander action 中函数的形参，参数类型为 Arguments 对象，即为 ...[args1, args2..., commandOpts, commandObj]
+ * 参数为 commander action 中函数的形参，参数类型为 Arguments 对象，即为 ...[arg1, arg2..., commandOpts, commandObj]
  * 
  * @example
  * const commander = require('commander');
@@ -70,7 +71,32 @@ async function exec() {
   const rootFile = pkg.getRootFilePath();
   if(rootFile) {
     try {
-      require(rootFile)(...arguments);
+      const cmdActionArgs = Array.from(arguments);
+      const o = Object.create(null);
+      Object.keys(cmdObj).forEach(key => {
+        if (cmdObj.hasOwnProperty(key) && !key.startsWith('_') && key !== 'parent') {
+          o[key] = cmdObj[key]; 
+        } else if (key === 'parent') {
+          o[key] = {
+            opts: cmdObj[key].opts(),
+          };
+        }
+      });
+      cmdActionArgs[cmdActionArgs.length - 1] = o;
+      const code = `require('${rootFile}')(${JSON.stringify(cmdActionArgs)})`;
+      const child = childProcess.spawn('node', ['-e', code], {
+        cwd: process.cwd(),
+        env: process.env,
+        stdio: 'inherit',
+      });
+      child.on('error', e => {
+        log.error(e.message);
+        process.exit(1);
+      });
+      child.on('exit', code => {
+        log.verbose('命令执行成功，退出状态码：' + code);
+        process.exit(code);
+      });
     } catch(e) {
       log.error(e.message);
     }

@@ -45,8 +45,11 @@ function registerCommand() {
     .action(exec);
 
   program.on('option:debug', function () {
-    this.opts().debug && (log.level = 'verbose');
-    log.verbose('debug', colors.yellow('调试模式已开启！'))
+     if (this.opts().debug) {
+      process.env.LOG_LEVEL = 'verbose';
+      log.level = process.env.LOG_LEVEL;
+      log.verbose('debug', colors.yellow('调试模式已开启！'));
+    }
   })
 
   program.on('option:targetPath', function (targetPath) {

@@ -16,9 +16,8 @@ class InitCommand extends Command {
   }
 }
 
-function init(projectName, commandOpts, commandObj) {
-  console.log('init',projectName, commandOpts, commandObj.parent.opts(), process.env.CLI_TARGET_PATH);
-  return new InitCommand(arguments);
+function init(cmdActionArgs) {
+  return new InitCommand(cmdActionArgs);
 }
 
 exports.InitCommand = InitCommand;
