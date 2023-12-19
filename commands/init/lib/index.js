@@ -23,13 +23,16 @@ class InitCommand extends Command {
 
   async exec() {
     try {
-      const ready = await this.prepare();
-      if (ready) {
-        
+      const projectInfo = await this.prepare();
+      if (projectInfo) {
+        this.downloadTemplate();
       }
     } catch (error) {
       log.error(error.message);
     }
+  }
+
+  downloadTemplate() {
   }
 
   async prepare() {
@@ -63,7 +66,7 @@ class InitCommand extends Command {
   }
 
   async getProjectInfo() {
-    const projectInfo = {};
+    let projectInfo = {};
     const { type } = await iq.prompt([{
       type: 'list',
       name: 'type',
@@ -81,13 +84,13 @@ class InitCommand extends Command {
       ],
     }]);
     if (type === TYPE_PROJECT) {
-      const o = await iq.prompt([
+      const project = await iq.prompt([
         {
           type: 'input',
           name: 'projectName',
           message: '请输入项目名称',
           default: 'my-project',
-          validate: function(input) {
+          validate: function (input) {
             const done = this.async();
             setTimeout(() => {
               if (/^[a-zA-Z]+([-|_][a-zA-Z]+)*[a-zA-Z]*$/.test(input)) {
@@ -115,7 +118,7 @@ class InitCommand extends Command {
           name: 'projectVersion',
           message: '请输入项目版本号',
           default: '1.0.0',
-          validate: function(input) {
+          validate: function (input) {
             const done = this.async();
             setTimeout(() => {
               if (semver.valid(input)) {
@@ -125,8 +128,8 @@ class InitCommand extends Command {
               }
             });
           },
-          filter: function(input) {
-            if(semver.valid(input)) {
+          filter: function (input) {
+            if (semver.valid(input)) {
               return semver.valid(input);
             } else {
               return input
@@ -134,16 +137,23 @@ class InitCommand extends Command {
           }
         },
       ]);
+      projectInfo = {
+        type,
+        ...project,
+      }
     } else if (type === TYPE_COMPONENT) {
-      const { name } = await iq.prompt([{
+      const component = await iq.prompt([{
         type: 'input',
         name: 'name',
         message: '请输入组件名称',
         default: 'my-component',
       }]);
-      log.verbose('name', name);
-      projectInfo.name = name;
+      projectInfo = {
+        type,
+       ...component,
+      }
     }
+    return projectInfo;
   }
 
   isDirEmpty(currentPath) {
