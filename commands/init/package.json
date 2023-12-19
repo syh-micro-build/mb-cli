@@ -28,7 +28,11 @@
   },
   "dependencies": {
     "@mb-cli/command": "file:../../models/command",
-    "@mb-cli/log": "file:../../utils/log"
+    "@mb-cli/log": "file:../../utils/log",
+    "colors": "^1.4.0",
+    "fs-extra": "^11.2.0",
+    "inquirer": "^8.2.6",
+    "semver": "^7.5.4"
   },
   "bugs": {
     "url": "https://github.com/syh-micro-build/mb-cli/issues"
