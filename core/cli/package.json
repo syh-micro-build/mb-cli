@@ -1,6 +1,6 @@
 {
   "name": "@mb-cli/core",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "> TODO: description",
   "author": "huishanyi <1342088650@qq.com>",
   "homepage": "https://github.com/syh-micro-build/mb-cli/tree/main/packages/core#readme",
@@ -27,10 +27,10 @@
     "test": "node ./__tests__/core.test.js"
   },
   "dependencies": {
-    "@mb-cli/get-npm-info": "file:../../utils/get-npm-info",
     "@mb-cli/exec": "file:../exec",
-    "@mb-cli/log": "file:../../utils/log",
+    "@mb-cli/get-npm-info": "file:../../utils/get-npm-info",
     "@mb-cli/init": "file:../../commands/init",
+    "@mb-cli/log": "file:../../utils/log",
     "colors": "^1.4.0",
     "commander": "^11.1.0",
     "dotenv": "^16.3.1",
