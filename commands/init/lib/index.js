@@ -10,6 +10,8 @@ const semver = require('semver');
 const Command = require('@mb-cli/command');
 const log = require('@mb-cli/log');
 
+const getProjectTemplate = require('./getProjectTemplate');
+
 const TYPE_PROJECT = 'project';
 const TYPE_COMPONENT = 'component';
 
@@ -25,6 +27,7 @@ class InitCommand extends Command {
     try {
       const projectInfo = await this.prepare();
       if (projectInfo) {
+        this.projectInfo = projectInfo;
         this.downloadTemplate();
       }
     } catch (error) {
@@ -33,9 +36,15 @@ class InitCommand extends Command {
   }
 
   downloadTemplate() {
+    console.log(this.projectInfo,this.template);
   }
 
   async prepare() {
+    const template = await getProjectTemplate();
+    if (!template || template.length === 0) {
+      throw new Error('没有找到项目模板');
+    }
+    this.template = template;
     const currentPath = process.cwd();
     if (!this.isDirEmpty(currentPath)) {
       let isContinue = false;
