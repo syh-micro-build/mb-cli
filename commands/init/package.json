@@ -31,6 +31,7 @@
     "@mb-cli/package": "file:../../models/package",
     "@mb-cli/log": "file:../../utils/log",
     "@mb-cli/request": "file:../../utils/request",
+    "@mb-cli/utils": "file:../../utils/utils",
     "colors": "^1.4.0",
     "fs-extra": "^11.2.0",
     "inquirer": "^8.2.6",

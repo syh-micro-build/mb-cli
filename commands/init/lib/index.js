@@ -11,6 +11,7 @@ const semver = require('semver');
 const Command = require('@mb-cli/command');
 const Package = require('@mb-cli/package');
 const log = require('@mb-cli/log');
+const { spinnerStart } = require('@mb-cli/utils');
 
 const getProjectTemplate = require('./getProjectTemplate');
 const path = require('path');
@@ -52,9 +53,15 @@ class InitCommand extends Command {
       packageVersion: version,
     });
     if (! await templateNpm.exists()) {
+      const spinner = spinnerStart('正在下载模板...');
       await templateNpm.install();
+      spinner.stop(true);
+      log.success('模板下载完成！');
     } else {
+      const spinner = spinnerStart('正在更新模板...');
       await templateNpm.update();
+      spinner.stop(true);
+      log.success('模板更新完成！');
     }
   }
 
