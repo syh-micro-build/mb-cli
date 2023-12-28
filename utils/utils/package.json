@@ -26,5 +26,8 @@
   "bugs": {
     "url": "https://github.com/syh-micro-build/mb-cli/issues"
   },
-  "gitHead": "93a2f3906fe6c8aa48e51d4254788503f8b46b70"
+  "gitHead": "93a2f3906fe6c8aa48e51d4254788503f8b46b70",
+  "dependencies": {
+    "cli-spinner": "^0.2.10"
+  }
 }
