@@ -105,7 +105,7 @@ function createDefaultRC() {
 }
 
 function checkUserHome() {
-  log.info('User Home Dir', os.userInfo().homedir);
+  log.info('User Home Dir', os.homedir());
 }
 
 function checkCurUser() {
