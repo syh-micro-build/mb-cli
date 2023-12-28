@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require('fs');
+const os = require('os');
 
 const iq = require('inquirer');
 const fse = require('fs-extra');
@@ -8,9 +9,11 @@ const colors = require('colors');
 const semver = require('semver');
 
 const Command = require('@mb-cli/command');
+const Package = require('@mb-cli/package');
 const log = require('@mb-cli/log');
 
 const getProjectTemplate = require('./getProjectTemplate');
+const path = require('path');
 
 const TYPE_PROJECT = 'project';
 const TYPE_COMPONENT = 'component';
@@ -28,15 +31,31 @@ class InitCommand extends Command {
       const projectInfo = await this.prepare();
       if (projectInfo) {
         this.projectInfo = projectInfo;
-        this.downloadTemplate();
+        await this.downloadTemplate();
       }
     } catch (error) {
       log.error(error.message);
     }
   }
 
-  downloadTemplate() {
-    console.log(this.projectInfo,this.template);
+  async downloadTemplate() {
+    const { projectTemplate } = this.projectInfo;
+    const templateInfo = this.template.find(item => item.npmName === projectTemplate);
+    const { npmName, version } = templateInfo;
+    const userHome = os.homedir();
+    const targetPath = path.resolve(userHome, '.mb-cli', 'template');
+    const storeDir = path.resolve(userHome, '.mb-cli', 'template', 'node_modules');
+    const templateNpm = new Package({
+      targetPath,
+      storeDir,
+      packageName: npmName,
+      packageVersion: version,
+    });
+    if (! await templateNpm.exists()) {
+      await templateNpm.install();
+    } else {
+      await templateNpm.update();
+    }
   }
 
   async prepare() {
@@ -145,6 +164,18 @@ class InitCommand extends Command {
             }
           }
         },
+        {
+          type: 'list',
+          name: 'projectTemplate',
+          message: '请选择项目模板',
+          default: 0,
+          choices: this.template.map((item, index) => {
+            return {
+              name: item.name,
+              value: item.npmName,
+            }
+          })
+        }
       ]);
       projectInfo = {
         type,

@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@mb-cli/command": "file:../../models/command",
+    "@mb-cli/package": "file:../../models/package",
     "@mb-cli/log": "file:../../utils/log",
     "@mb-cli/request": "file:../../utils/request",
     "colors": "^1.4.0",
