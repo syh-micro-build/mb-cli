@@ -54,14 +54,28 @@ class InitCommand extends Command {
     });
     if (! await templateNpm.exists()) {
       const spinner = spinnerStart('正在下载模板...');
-      await templateNpm.install();
-      spinner.stop(true);
-      log.success('模板下载完成！');
+      try {
+        await templateNpm.install();
+        setTimeout(() => {
+          log.success('模板下载完成！');
+        })
+      } catch (error) {
+        throw error;
+      } finally {
+        spinner.stop(true);
+      }
     } else {
       const spinner = spinnerStart('正在更新模板...');
-      await templateNpm.update();
-      spinner.stop(true);
-      log.success('模板更新完成！');
+      try {
+        await templateNpm.update();
+        setTimeout(() => {
+          log.success('模板更新完成！');
+        })
+      } catch (error) {
+        throw error;
+      } finally {
+        spinner.stop(true);
+      }
     }
   }
 
@@ -197,7 +211,7 @@ class InitCommand extends Command {
       }]);
       projectInfo = {
         type,
-       ...component,
+        ...component,
       }
     }
     return projectInfo;
