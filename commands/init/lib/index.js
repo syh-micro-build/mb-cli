@@ -18,6 +18,8 @@ const path = require('path');
 
 const TYPE_PROJECT = 'project';
 const TYPE_COMPONENT = 'component';
+const TEMPLATE_TYPE_NORMAL = 'normal';
+const TEMPLATE_TYPE_CUSTOM = 'custom';
 
 class InitCommand extends Command {
   init() {
@@ -33,15 +35,54 @@ class InitCommand extends Command {
       if (projectInfo) {
         this.projectInfo = projectInfo;
         await this.downloadTemplate();
+        await this.installTemplate();
       }
     } catch (error) {
       log.error(error.message);
     }
   }
 
+  async installTemplate() {
+    if (this.templateInfo) {
+      if (!this.templateInfo.type) {
+        this.templateInfo.type = TEMPLATE_TYPE_NORMAL;
+      }
+      if (this.templateInfo.type === TEMPLATE_TYPE_NORMAL) {
+        await this.installNormalTemplate();
+      } else if (this.templateInfo.type === TEMPLATE_TYPE_CUSTOM) {
+        await this.installCustomTemplate();
+      } else {
+        throw new Error('模板类型错误');
+      }
+    } else {
+      throw new Error('模板不存在');
+    }
+  }
+
+  async installNormalTemplate() {
+    let spinner = spinnerStart('正在安装模板...');
+    try {
+      const templatePath = this.templateNpm.getCacheFilePath();
+      const targetPath = process.cwd();
+      fse.ensureDirSync(templatePath);
+      fse.ensureDirSync(targetPath);
+      fse.copySync(templatePath, targetPath);
+      spinner.stop(true);
+      log.success('模板安装完成！');
+    } catch (error) {
+      spinner.stop(true);
+      throw error;
+    }
+  }
+
+  async installCustomTemplate() {
+    console.log('正在安装自定义模板...');
+  }
+
   async downloadTemplate() {
     const { projectTemplate } = this.projectInfo;
     const templateInfo = this.template.find(item => item.npmName === projectTemplate);
+    this.templateInfo = templateInfo;
     const { npmName, version } = templateInfo;
     const userHome = os.homedir();
     const targetPath = path.resolve(userHome, '.mb-cli', 'template');
@@ -52,29 +93,26 @@ class InitCommand extends Command {
       packageName: npmName,
       packageVersion: version,
     });
+    this.templateNpm = templateNpm;
     if (! await templateNpm.exists()) {
       const spinner = spinnerStart('正在下载模板...');
       try {
         await templateNpm.install();
-        setTimeout(() => {
-          log.success('模板下载完成！');
-        })
-      } catch (error) {
-        throw error;
-      } finally {
         spinner.stop(true);
+        log.success('模板下载完成！');
+      } catch (error) {
+        spinner.stop(true);
+        throw error;
       }
     } else {
       const spinner = spinnerStart('正在更新模板...');
       try {
         await templateNpm.update();
-        setTimeout(() => {
-          log.success('模板更新完成！');
-        })
-      } catch (error) {
-        throw error;
-      } finally {
         spinner.stop(true);
+        log.success('模板更新完成！');
+      } catch (error) {
+        spinner.stop(true);
+        throw error;
       }
     }
   }
