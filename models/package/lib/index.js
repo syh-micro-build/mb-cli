@@ -77,9 +77,27 @@ class Package {
    */
   getCacheFilePath(packageVersion = '') {
     if (os.type() === 'Windows_NT') {
-      const cacheFilePathPreFix = this.packageName.replace('/', '+');
-      return path.resolve(this.storeDir, '.store', `${cacheFilePathPreFix}@${packageVersion || this.packageVersion}`);
-    } else if (os.type() === 'Darwin') {  
+      const packageNameArr = this.packageName.split('/');
+      if (packageNameArr.length > 1) {
+        const [origin, packageName] = packageNameArr;
+        return path.resolve(
+          this.storeDir,
+          '.store',
+          `${origin}+${packageName}@${packageVersion || this.packageVersion}`,
+          'node_modules',
+          origin,
+          packageName
+        );
+      } else {
+        return path.resolve(
+          this.storeDir,
+          '.store',
+          `${this.packageName}@${packageVersion || this.packageVersion}`,
+          'node_modules',
+          this.packageName
+        );
+      }
+    } else if (os.type() === 'Darwin') {
       const cacheFilePathPreFix = this.packageName.replace('/', '_');
       return path.resolve(this.storeDir, `_${cacheFilePathPreFix}@${packageVersion || this.packageVersion}@${this.packageName}`);
     }
@@ -94,7 +112,7 @@ class Package {
       await this.prepare();
       return pathExists(this.getCacheFilePath())
     } else {
-     return pathExists(this.targetPath);
+      return pathExists(this.targetPath);
     }
   }
 
