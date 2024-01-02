@@ -7,6 +7,8 @@ const iq = require('inquirer');
 const fse = require('fs-extra');
 const colors = require('colors');
 const semver = require('semver');
+const glob = require('glob');
+const ejs = require('ejs');
 
 const Command = require('@mb-cli/command');
 const Package = require('@mb-cli/package');
@@ -40,6 +42,7 @@ class InitCommand extends Command {
       }
     } catch (error) {
       log.error(error.message);
+      log.verbose(error);
     }
   }
 
@@ -86,6 +89,37 @@ class InitCommand extends Command {
     }
   }
 
+  async ejsRender(options) {
+    return new Promise((resolve, reject) => {
+      glob('**', {
+        cwd: process.cwd(),
+        ignore: options.ignore,
+        nodir: true,
+      }, (err, files) => {
+        if (err) {
+          reject(err);
+        }
+        Promise.all(files.map(file => {
+          const filePath = path.join(process.cwd(), file);
+          return new Promise((resolve1, reject1) => {
+            ejs.renderFile(filePath, this.projectInfo, (err, str) => {
+              if (err) {
+                reject1(err);
+              } else {
+                fs.writeFileSync(filePath, str);
+                resolve1(str);
+              }
+            });
+          })
+        })).then(() => {
+          resolve();
+        }).catch(err => {
+          reject(err);
+        });
+      })
+    });
+  }
+
   async installNormalTemplate() {
     let spinner = spinnerStart('正在安装模板...');
     try {
@@ -96,6 +130,8 @@ class InitCommand extends Command {
       fse.copySync(templatePath, targetPath);
       spinner.stop(true);
       log.success('模板安装完成！');
+      const ignore = ['node_modules/**'];
+      await this.ejsRender({ ignore });
       const { installCommand, startCommand } = this.templateInfo;
       await this.execCommand(installCommand, '依赖安装成功！', '依赖安装失败！');
       await this.execCommand(startCommand, '项目启动成功！', '项目启动失败！');
