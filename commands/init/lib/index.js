@@ -20,6 +20,7 @@ const TYPE_PROJECT = 'project';
 const TYPE_COMPONENT = 'component';
 const TEMPLATE_TYPE_NORMAL = 'normal';
 const TEMPLATE_TYPE_CUSTOM = 'custom';
+const WHITE_COMMANDS = ['npm', 'cnpm', 'yarn'];
 
 class InitCommand extends Command {
   init() {
@@ -59,6 +60,32 @@ class InitCommand extends Command {
     }
   }
 
+  checkCommand(command) {
+    if (WHITE_COMMANDS.includes(command)) return command;
+    return null;
+  }
+
+  async execCommand(command, successMessage, errMessage) {
+    if (!command) return;
+    const cmdArr = command.split(' ');
+    const cmd = this.checkCommand(cmdArr[0]);
+    if (!cmd) {
+      throw new Error(`不支持的命令:${command}，当前支持命令：${WHITE_COMMANDS.join('、')}`);
+    }
+    const args = cmdArr.slice(1);
+    const code = await spawnWindowsOrMacOSSync(cmd, args, {
+      cwd: process.cwd(),
+      env: process.env,
+      stdio: 'inherit',
+    });
+    if (code !== 0) {
+      log.error(errMessage);
+      process.exit(1);
+    } else {
+      log.success(successMessage);
+    }
+  }
+
   async installNormalTemplate() {
     let spinner = spinnerStart('正在安装模板...');
     try {
@@ -70,38 +97,8 @@ class InitCommand extends Command {
       spinner.stop(true);
       log.success('模板安装完成！');
       const { installCommand, startCommand } = this.templateInfo;
-      if (installCommand) {
-        const installCmd = installCommand.split(' ');
-        const cmd = installCmd[0];
-        const args = installCmd.slice(1);
-        const code = await spawnWindowsOrMacOSSync(cmd, args, {
-          cwd: process.cwd(),
-          env: process.env,
-          stdio: 'inherit',
-        });
-        if (code!== 0) {
-          log.error('依赖安装失败！');
-          process.exit(1);
-        } else {
-          log.success('依赖安装成功！');
-        }
-      }
-      if (startCommand) {
-        const startCmd = startCommand.split(' ');
-        const cmd = startCmd[0];
-        const args = startCmd.slice(1);
-        const code = await spawnWindowsOrMacOSSync(cmd, args, {
-          cwd: process.cwd(),
-          env: process.env,
-          stdio: 'inherit',
-        });
-        if (code!== 0) {
-          log.error('项目启动失败！');
-          process.exit(1);
-        } else {
-          log.success('项目启动成功！');
-        }
-      }
+      await this.execCommand(installCommand, '依赖安装成功！', '依赖安装失败！');
+      await this.execCommand(startCommand, '项目启动成功！', '项目启动失败！');
     } catch (error) {
       spinner.stop(true);
       throw error;
