@@ -130,7 +130,7 @@ class InitCommand extends Command {
       fse.copySync(templatePath, targetPath);
       spinner.stop(true);
       log.success('模板安装完成！');
-      const ignore = ['node_modules/**'];
+      const ignore = ['node_modules/**', 'index.html'];
       await this.ejsRender({ ignore });
       const { installCommand, startCommand } = this.templateInfo;
       await this.execCommand(installCommand, '依赖安装成功！', '依赖安装失败！');
@@ -244,7 +244,7 @@ class InitCommand extends Command {
           type: 'input',
           name: 'projectName',
           message: '请输入项目名称',
-          default: 'my-project',
+          default: this.projectName || 'my-project',
           validate: function (input) {
             const done = this.async();
             setTimeout(() => {
