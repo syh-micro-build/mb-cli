@@ -37,8 +37,48 @@ function spinnerStart(message, spinnerString = '|/-\\') {
   return spinner;
 }
 
+/**
+ * Node child_process.spawn 兼容方法
+ * @param {string} command 命令
+ * @param {string[]} args 命令参数
+ * @param {object} options spawn 配置项
+ * @returns 进程对象
+ * @example
+ * const child = spawnWindowsOrMacOS('npm', ['install'], {stdio: 'inherit'});
+ */
+function spawnWindowsOrMacOS(command, args, options) {
+  const isWindows = process.platform === 'win32';
+  const cmd = isWindows? 'cmd' : command;
+  const argsStr = isWindows? ['/c'].concat(command, args) : args;
+  return require('child_process').spawn(cmd, argsStr, options || {stdio: 'inherit'});
+}
+
+/**
+ * Node child_process.spawn 兼容方法（异步）
+ * @param {string} command 命令
+ * @param {string[]} args 命令参数
+ * @param {object} options spawn 配置项
+ * @returns Promise
+ * @example
+ * // code = 0 表示成功
+ * const code = await spawnWindowsOrMacOSSync('npm', ['install'], {stdio: 'inherit'});
+ */
+function spawnWindowsOrMacOSSync(command, args, options) {
+  return new Promise((resolve, reject) => {
+    spawnWindowsOrMacOS(command, args, options).on('close', (code) => {
+      if (code === 0) {
+        resolve(code);
+      } else {
+        reject(code);
+      }
+    });
+  })
+}
+
 module.exports = {
   isObject,
   isArguments,
-  spinnerStart
+  spinnerStart,
+  spawnWindowsOrMacOS,
+  spawnWindowsOrMacOSSync
 };
