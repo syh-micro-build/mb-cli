@@ -11,7 +11,7 @@ const semver = require('semver');
 const Command = require('@mb-cli/command');
 const Package = require('@mb-cli/package');
 const log = require('@mb-cli/log');
-const { spinnerStart } = require('@mb-cli/utils');
+const { spinnerStart, spawnWindowsOrMacOSSync } = require('@mb-cli/utils');
 
 const getProjectTemplate = require('./getProjectTemplate');
 const path = require('path');
@@ -69,6 +69,39 @@ class InitCommand extends Command {
       fse.copySync(templatePath, targetPath);
       spinner.stop(true);
       log.success('模板安装完成！');
+      const { installCommand, startCommand } = this.templateInfo;
+      if (installCommand) {
+        const installCmd = installCommand.split(' ');
+        const cmd = installCmd[0];
+        const args = installCmd.slice(1);
+        const code = await spawnWindowsOrMacOSSync(cmd, args, {
+          cwd: process.cwd(),
+          env: process.env,
+          stdio: 'inherit',
+        });
+        if (code!== 0) {
+          log.error('依赖安装失败！');
+          process.exit(1);
+        } else {
+          log.success('依赖安装成功！');
+        }
+      }
+      if (startCommand) {
+        const startCmd = startCommand.split(' ');
+        const cmd = startCmd[0];
+        const args = startCmd.slice(1);
+        const code = await spawnWindowsOrMacOSSync(cmd, args, {
+          cwd: process.cwd(),
+          env: process.env,
+          stdio: 'inherit',
+        });
+        if (code!== 0) {
+          log.error('项目启动失败！');
+          process.exit(1);
+        } else {
+          log.success('项目启动成功！');
+        }
+      }
     } catch (error) {
       spinner.stop(true);
       throw error;
@@ -146,6 +179,8 @@ class InitCommand extends Command {
         }]);
         if (isForce) {
           fse.emptyDirSync(currentPath);
+        } else {
+          return;
         }
       }
     }
