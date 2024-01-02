@@ -94,7 +94,7 @@ async function exec() {
         process.exit(1);
       });
       child.on('exit', code => {
-        log.verbose('命令执行成功，退出状态码：' + code);
+        log.verbose('命令执行结束，退出状态码：' + code);
         process.exit(code);
       });
     } catch(e) {
