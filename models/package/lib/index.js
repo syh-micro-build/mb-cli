@@ -86,7 +86,8 @@ class Package {
           `${origin}+${packageName}@${packageVersion || this.packageVersion}`,
           'node_modules',
           origin,
-          packageName
+          packageName,
+          'template'
         );
       } else {
         return path.resolve(
@@ -94,12 +95,13 @@ class Package {
           '.store',
           `${this.packageName}@${packageVersion || this.packageVersion}`,
           'node_modules',
-          this.packageName
+          this.packageName,
+          'template'
         );
       }
     } else if (os.type() === 'Darwin') {
       const cacheFilePathPreFix = this.packageName.replace('/', '_');
-      return path.resolve(this.storeDir, `_${cacheFilePathPreFix}@${packageVersion || this.packageVersion}@${this.packageName}`);
+      return path.resolve(this.storeDir, `_${cacheFilePathPreFix}@${packageVersion || this.packageVersion}@${this.packageName}`, 'template');
     }
     return null;
   }
@@ -153,8 +155,8 @@ class Package {
           }
         ],
       });
-      this.packageVersion = latestPackageVersion;
     }
+    this.packageVersion = latestPackageVersion;
   }
 
   /**
