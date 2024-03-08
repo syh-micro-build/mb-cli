@@ -5,7 +5,7 @@
   "keywords": [
     "exec"
   ],
-  "author": "huishanyi <1342088650@qq.com>",
+  "author": "ShanYi-Hui<shanyi.hui@qq.com>",
   "homepage": "https://github.com/syh-micro-build/mb-cli/tree/main/core/exec#readme",
   "license": "ISC",
   "main": "lib/index.js",

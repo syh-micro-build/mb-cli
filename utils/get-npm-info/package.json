@@ -2,7 +2,7 @@
   "name": "get-npm-info",
   "version": "0.0.3",
   "description": "get npm info",
-  "author": "huishanyi <1342088650@qq.com>",
+  "author": "ShanYi-Hui<shanyi.hui@qq.com>",
   "homepage": "https://github.com/syh-micro-build/mb-cli/tree/main/utils/get-npm-info#readme",
   "license": "ISC",
   "main": "lib/index.js",
