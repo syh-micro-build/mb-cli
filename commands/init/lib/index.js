@@ -151,8 +151,8 @@ class InitCommand extends Command {
     this.templateInfo = templateInfo;
     const { npmName, version } = templateInfo;
     const userHome = os.homedir();
-    const targetPath = path.resolve(userHome, '.mb-cli', 'template');
-    const storeDir = path.resolve(userHome, '.mb-cli', 'template', 'node_modules');
+    const targetPath = path.resolve(userHome, 'mb-cli', 'template');
+    const storeDir = path.resolve(userHome, 'mb-cli', 'template', 'node_modules');
     const templateNpm = new Package({
       targetPath,
       storeDir,
