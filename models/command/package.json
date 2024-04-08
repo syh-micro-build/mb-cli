@@ -1,6 +1,6 @@
 {
   "name": "@mb-cli/command",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "mb-cli command",
   "author": "ShanYi-Hui<shanyi.hui@qq.com>",
   "homepage": "https://github.com/syh-micro-build/mb-cli/tree/main/models/command#readme",

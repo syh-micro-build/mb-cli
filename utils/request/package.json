@@ -1,6 +1,6 @@
 {
   "name": "@mb-cli/request",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "mb-cli request",
   "author": "ShanYi-Hui<shanyi.hui@qq.com>",
   "homepage": "https://github.com/syh-micro-build/mb-cli/tree/main/utils/request#readme",
