@@ -130,7 +130,8 @@ class InitCommand extends Command {
       fse.copySync(templatePath, targetPath);
       spinner.stop(true);
       log.success('模板安装完成！');
-      const ignore = ['node_modules/**', 'index.html'];
+      const templateIgnore = this.templateInfo.ignore || [];
+      const ignore = ['**/node_modules/**', ...templateIgnore];
       await this.ejsRender({ ignore });
       const { installCommand, startCommand } = this.templateInfo;
       await this.execCommand(installCommand, '依赖安装成功！', '依赖安装失败！');
@@ -238,6 +239,7 @@ class InitCommand extends Command {
         },
       ],
     }]);
+    this.template = this.template.filter(template => template.tag?.includes(type));
     if (type === TYPE_PROJECT) {
       const project = await iq.prompt([
         {
