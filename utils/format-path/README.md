@@ -9,3 +9,4 @@ const formatPath = require('@mb-cli/format-path');
 
 // TODO: DEMONSTRATE API
 ```
+test

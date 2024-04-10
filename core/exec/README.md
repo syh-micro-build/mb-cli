@@ -9,3 +9,4 @@ const exec = require('@mb-cli/exec');
 
 // TODO: DEMONSTRATE API
 ```
+test

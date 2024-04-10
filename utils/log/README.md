@@ -9,3 +9,4 @@ const log = require('@mb-cli/log');
 
 // TODO: DEMONSTRATE API
 ```
+test

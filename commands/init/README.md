@@ -9,3 +9,4 @@ const init = require('@mb-cli/init');
 
 // TODO: DEMONSTRATE API
 ```
+test
