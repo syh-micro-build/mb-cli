@@ -1,6 +1,6 @@
 {
   "name": "get-npm-info",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "get npm info",
   "author": "ShanYi-Hui<shanyi.hui@qq.com>",
   "homepage": "https://github.com/syh-micro-build/mb-cli/tree/main/utils/get-npm-info#readme",
