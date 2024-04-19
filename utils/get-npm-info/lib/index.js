@@ -32,7 +32,7 @@ function getNpmInfo(npmName, registry = '') {
  * @returns 官方源 或 淘宝源
  */
 function getDefaultRegistry(isOriginal = true) {
-  return isOriginal ? 'https://registry.npmjs.org' : 'https://registry.npm.taobao.org';
+  return isOriginal ? 'https://registry.npmjs.org' : 'https://registry.npmmirror.com';
 }
 
 /**
