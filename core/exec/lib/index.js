@@ -6,9 +6,7 @@ const childProcess = require('child_process');
 const Package = require('@mb-cli/Package');
 const log = require('@mb-cli/log');
 
-const SETTINGS = {
-  init: '@mb-cli/init'
-}
+const COMMAND_PKG_DIC = require('../dic.json')
 
 const CACHE_DIR = 'dependencies';
 
@@ -20,7 +18,7 @@ const CACHE_DIR = 'dependencies';
  * @example
  * const commander = require('commander');
  * 
- * const { exec } = require('@mb-cli/commander');
+ * const exec = require('@mb-cli/exec');
  * 
  * const program = new commander.Command();
  * 
@@ -39,10 +37,10 @@ async function exec() {
 
   const cmdObj = arguments[arguments.length - 1];
   const cmdName = cmdObj.name();
-  const packageName = SETTINGS[cmdName];
+  const packageName = COMMAND_PKG_DIC[cmdName];
   const packageVersion = 'latest';
 
-  if (!targetPath) {
+  if (!targetPath) {// 无本地调试包则远端获取并应用
     targetPath = path.resolve(homePath, CACHE_DIR);
     storeDir = path.resolve(targetPath, 'node_modules');
     pkg = new Package({
@@ -56,7 +54,7 @@ async function exec() {
     } else {
       await pkg.install();
     }
-  } else {
+  } else {// 有本地调试包则直接应用
     pkg = new Package({
       targetPath,
       packageName,
@@ -71,6 +69,7 @@ async function exec() {
   const rootFile = pkg.getRootFilePath();
   if(rootFile) {
     try {
+      // 简化cmdObj提高传参效率
       const cmdActionArgs = Array.from(arguments);
       const o = Object.create(null);
       Object.keys(cmdObj).forEach(key => {
@@ -83,7 +82,11 @@ async function exec() {
         }
       });
       cmdActionArgs[cmdActionArgs.length - 1] = o;
+
+      // 拼接命令包与参数
       const code = `require('${rootFile}')(${JSON.stringify(cmdActionArgs)})`;
+
+      // 子进程执行命令并监听
       const child = childProcess.spawn('node', ['-e', code], {
         cwd: process.cwd(),
         env: process.env,
