@@ -23,8 +23,8 @@ const LOWEST_NODE_VERSION = '18.12.1';
  *  exec() {}
  * }
  * 
- * function init(arg1, arg2..., commandOpts, commandObj) {
- *  return new InitCommand(arguments);
+ * function init(cmdActionArgs) {
+ *  return new InitCommand(cmdActionArgs);
  * }
  * 
  * exports.InitCommand = InitCommand;
