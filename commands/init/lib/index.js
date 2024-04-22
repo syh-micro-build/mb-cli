@@ -24,7 +24,23 @@ const TEMPLATE_TYPE_NORMAL = 'normal';
 const TEMPLATE_TYPE_CUSTOM = 'custom';
 const WHITE_COMMANDS = ['npm', 'cnpm', 'yarn'];
 
+/**
+ * 初始化命令类，基于 Command 类（详细请查看 \@mb-cli/command 包）
+ * @class
+ * @classdesc
+ * - 初始化参数为一个对象，参数为 commander action 中函数的形参，参数类型为 Arguments 对象所转换成的 Arrar 对象，即为 [arg1, arg2..., commandOpts, commandObj]，其中 commandObj 已去除无用属性
+ * - 拥有内部方法 init、exec、installTemplate、checkCommand、execCommand、ejsRender、installNormalTemplate、installCustomTemplate、downloadTemplate、prepare、getProjectInfo、isDirEmpty 方法
+ * @example
+ * const init = new InitCommand(cmdActionArgs);
+ * init()
+ * ...
+ */
 class InitCommand extends Command {
+  /**
+   * 初始化
+   * 
+   * 从命令行解析出 projecName(项目名称) 与 force(是否强制初始化)
+   */
   init() {
     this.projectName = this._argv[0] || '';
     this.force = this._argv[1].force || false;
@@ -32,6 +48,9 @@ class InitCommand extends Command {
     log.verbose('force', this.force);
   }
 
+  /**
+   * 执行下载模板与安装模板
+   */
   async exec() {
     try {
       const projectInfo = await this.prepare();
@@ -46,6 +65,9 @@ class InitCommand extends Command {
     }
   }
 
+  /**
+   * 安装模板
+   */
   async installTemplate() {
     if (this.templateInfo) {
       if (!this.templateInfo.type) {
@@ -63,11 +85,25 @@ class InitCommand extends Command {
     }
   }
 
+  /**
+   * 检查命令是否在白名单
+   * @param {*} command 命令名称
+   * @returns null
+   */
   checkCommand(command) {
     if (WHITE_COMMANDS.includes(command)) return command;
     return null;
   }
 
+  /**
+   * 执行命令
+   * 
+   * 命令若不支持将报错并返回支持的命令列表
+   * @param {*} command 命令名称
+   * @param {*} successMessage 执行成功的提示
+   * @param {*} errMessage 执行失败的提示
+   * @returns 
+   */
   async execCommand(command, successMessage, errMessage) {
     if (!command) return;
     const cmdArr = command.split(' ');
@@ -89,6 +125,11 @@ class InitCommand extends Command {
     }
   }
 
+  /**
+   * 模板渲染
+   * @param {*} options 模板渲染所需的参数
+   * @returns Promise对象
+   */
   async ejsRender(options) {
     return new Promise((resolve, reject) => {
       glob('**', {
@@ -120,6 +161,9 @@ class InitCommand extends Command {
     });
   }
 
+  /**
+   * 安装标准模板
+   */
   async installNormalTemplate() {
     let spinner = spinnerStart('正在安装模板...');
     try {
@@ -142,18 +186,24 @@ class InitCommand extends Command {
     }
   }
 
+  /**
+   * 安装自定义模板
+   */
   async installCustomTemplate() {
     console.log('正在安装自定义模板...');
   }
 
+  /**
+   * 下载模板
+   */
   async downloadTemplate() {
     const { projectTemplate } = this.projectInfo;
     const templateInfo = this.template.find(item => item.npmName === projectTemplate);
     this.templateInfo = templateInfo;
     const { npmName, version } = templateInfo;
     const userHome = os.homedir();
-    const targetPath = path.resolve(userHome, 'mb-cli', 'template');
-    const storeDir = path.resolve(userHome, 'mb-cli', 'template', 'node_modules');
+    const targetPath = path.resolve(userHome, '.mb-cli', 'template');
+    const storeDir = path.resolve(userHome, '.mb-cli', 'template', 'node_modules');
     const templateNpm = new Package({
       targetPath,
       storeDir,
@@ -184,6 +234,12 @@ class InitCommand extends Command {
     }
   }
 
+  /**
+   * 初始化准备阶段
+   * 
+   * 获取模板信息，判断执行目录是否为空，不为空是否清空并继续初始化项目
+   * @returns 
+   */
   async prepare() {
     const template = await getProjectTemplate();
     if (!template || template.length === 0) {
@@ -221,6 +277,9 @@ class InitCommand extends Command {
     return await this.getProjectInfo();
   }
 
+  /**
+   * 询问机制获取项目信息
+   */
   async getProjectInfo() {
     let projectInfo = {};
     const { type } = await iq.prompt([{
@@ -325,6 +384,11 @@ class InitCommand extends Command {
     return projectInfo;
   }
 
+  /**
+   * 判断目录是否为空
+   * @param {*} currentPath 所需判断路径
+   * @returns 目录为空返回true，不为空返回false
+   */
   isDirEmpty(currentPath) {
     let fileList = fs.readdirSync(currentPath);
     fileList = fileList.filter(file => !file.startsWith('.') && ['node_modules'].indexOf(file) < 0);
@@ -332,6 +396,7 @@ class InitCommand extends Command {
   }
 }
 
+// 命令入口函数
 function init(cmdActionArgs) {
   return new InitCommand(cmdActionArgs);
 }
