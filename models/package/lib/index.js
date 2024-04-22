@@ -17,7 +17,7 @@ const { getDefaultRegistry, getNpmLatestVersion } = require('@mb-cli/get-npm-inf
  * @class
  * @classdesc
  * - 初始化参数为一个对象，包含 targetPath 远程包安装路径、storeDir 远程包缓存路径、packageName 远程包名、packageVersion 远程包版本号
- * - 拥有内部方法 exists、install、update、getRootFilePath
+ * - 拥有内部方法 exists、install、update、getRootFilePath、getCacheFilePath
  * @example
  * const package = new Package({targetPath,storeDir,packageName,packageVersion});
  * package.exists();
