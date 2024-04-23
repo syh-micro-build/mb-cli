@@ -9,6 +9,14 @@
 
 mb-cli 是一个服务于 Micro Build 生态的脚手架工具。主要用于创建和发布 Micro Build 中的组件、模块或应用，为开发人员生成模板，使其专注于核心业务开发并快速产出上线，同时它具备对接大型代码托管平台的能力（官方默认支持GitHub，GitLab 及 Gitee）。由于 mb-cli 采用 Lerna 架构模式，因此它天然具备强大的功能拓展能力，当然多包管理也轻而易举。
 
+### 生态
+
+- [mb-admin](https://github.com/syh-micro-build/mb-admin?tab=readme-ov-file): Micro Build 生态中一套基于 vue3、element-plus、typesScript、vite 的后台集成方案
+  - [官方文档国际地址](https://syh-micro-build.github.io/mb-admin-doc/)
+  - [官方文档国内地址](https://shanyi-hui.gitee.io/mb-admin-doc/)
+
+- 快速开源中。。。
+
 ## 特性
 
 - **自动化**：自动化创建发布项目
