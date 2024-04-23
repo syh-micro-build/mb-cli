@@ -7,7 +7,7 @@ const semver = require('semver');
 /**
  * 获取 npm 包信息
  * @param {string} npmName npm 包名称
- * @param {string} registry npm 源
+ * @param {string} registry 默认为 npm 官方源
  * @returns npm 包信息
  */
 function getNpmInfo(npmName, registry = '') {
