@@ -20,7 +20,19 @@ mb-cli 是一个服务于 Micro Build 生态的脚手架工具。主要用于创
 
 ## 官方文档
 
-详细功能及用法请看 [官方文档👈](https://syh-micro-build.github.io/mb-cli/)
+官方文档完善中，详细请看各子包文档：
+<p style="color:#666">本项目在高速迭代中，建议 fork 后，在本地运行查看，采用JSDOC注释，所有方法都有详细的说明。</p>
+
+- [@mb-cli/core](/core/cli/README.md)：核心入口模块
+- [@mb-cli/exec](/core/exec/README.md)：动态执行命令模块
+- [@mb-cli/init](/commands/init/README.md)：初始化功能
+- [@mb-cli/command](/models/command/README.md)：命令底层依赖
+- [@mb-cli/package](/models/package/README.md)：包管理工具
+- [@mb-cli/format-path](/utils/format-path/README.md)：路径操作系统兼容包
+- [@mb-cli/get-npm-info](/utils/get-npm-info/README.md)：npm 相关操作
+- [@mb-cli/log](/utils/log/README.md)：日志模块
+- [@mb-cli/request](/utils/request/README.md)：后台服务请求模块
+- [@mb-cli/utils](/utils/utils/README.md)：命令行基础工具集合
 
 ## 前序准备
 
@@ -84,6 +96,7 @@ npx mb-cli -h
 
 ## 捐赠
 
+如果本项目对你有所帮助，可以捐赠一杯奶茶，您的支持将鼓励我继续创作。
 捐赠开源，让技术照亮更多人的未来~~~
 
 - 支付宝
