@@ -49,6 +49,14 @@ npm i -g @mb-cli/cli
 mb-cli -h
 ```
 
+- 提交代码
+
+```bash
+git add .
+
+npx cz
+```
+
 ### 直接使用
 
 ```bash
