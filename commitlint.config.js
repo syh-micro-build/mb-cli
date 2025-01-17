@@ -84,7 +84,7 @@ export default {
     useAI: false,
     aiNumber: 1,
     themeColorCode: "",
-    scopes: ["ui", "logic", "types"],
+    scopes: ["ui", "api", "logic", "types"],
     allowCustomScopes: true,
     allowEmptyScopes: true,
     customScopesAlign: "bottom",
