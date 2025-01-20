@@ -13,8 +13,10 @@
   "license": "ISC",
   "author": "shitao <1426591905@qq.com>",
   "scripts": {
-    "test": "node ./__tests__/cli.test.js"
+    "test": "node ./__tests__/cli.test.js",
+    "serve": "tsx ./bin/cli.ts"
   },
+  "bin": "tsx ./bin/cli.ts",
   "files": [
     "lib"
   ],
