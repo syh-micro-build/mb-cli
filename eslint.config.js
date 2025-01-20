@@ -7,7 +7,13 @@ export default [
       "@typescript-eslint/no-var-requires": "off",
       "padding-line-between-statements": "off",
       "eol-last": "off",
-      "no-console": "off"
+      "no-console": "off",
+      "object-curly-newline": "off",
+      indent: ["error", 2],
+      "prefer-template": "off",
+      quotes: "off",
+      "function-paren-newline": "off",
+      "dot-location": "off"
     }
   }
 ];
