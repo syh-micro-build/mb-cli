@@ -13,7 +13,8 @@ export default [
       "prefer-template": "off",
       quotes: "off",
       "function-paren-newline": "off",
-      "dot-location": "off"
+      "dot-location": "off",
+      "@typescript-eslint/no-explicit-any": "error"
     }
   }
 ];
