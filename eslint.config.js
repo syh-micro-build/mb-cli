@@ -18,7 +18,12 @@ export default [
       "implicit-arrow-linebreak": "off",
       "object-property-newline": "off",
       "@typescript-eslint/naming-convention": "off",
-      "lines-around-comment": "off"
+      "lines-around-comment": "off",
+      "no-await-in-loop": "off",
+      "import/exports-last": "off"
     }
+  },
+  {
+    ignores: ["**/element-react/**", "**/element-vue/**"]
   }
 ];
