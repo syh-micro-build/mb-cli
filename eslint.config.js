@@ -24,6 +24,6 @@ export default [
     }
   },
   {
-    ignores: ["**/element-react/**", "**/element-vue/**"]
+    ignores: ["**/project-template/react/**", "**/project-template/vue/**"]
   }
 ];

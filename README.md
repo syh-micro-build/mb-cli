@@ -11,7 +11,6 @@ mb-cli 是一个服务于 Micro Build 生态的脚手架工具。主要用于创
 
 ### 生态
 
-
 ## 特性
 
 - **自动化**：自动化创建发布项目
@@ -24,10 +23,11 @@ mb-cli 是一个服务于 Micro Build 生态的脚手架工具。主要用于创
 ## 官方文档
 
 官方文档完善中，详细请看各子包文档：
+
 <p style="color:#666">本项目在高速迭代中，建议 fork 后，在本地运行查看，采用JSDOC注释，所有方法都有详细的说明。</p>
 
 - [@mb-cli/cli](/core/cli/README.md)：核心入口模块
- 
+
 ## 前序准备
 
 - [node](http://nodejs.org/) 和 [git](https://git-scm.com/) - 项目开发环境
@@ -63,7 +63,6 @@ npx cz
 npx mb-cli -h
 ```
 
- 
 **Pull Request:**
 
 1. Fork 代码
