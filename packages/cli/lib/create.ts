@@ -1,18 +1,56 @@
+import {
+  getProjectType,
+  getTemplateNames,
+  onInit
+} from "@mb-cli/project-template";
 import chalk from "chalk";
 import fs from "fs-extra";
+import inquirer from "inquirer";
 import path from "path";
 import validateProjectName from "validate-npm-package-name";
 
 import { generator } from "./generator";
 
 /**
+ * 创建模版
+ * @param options
+ */
+
+export const createTemplate = async (options: {
+  name: string;
+  projectType: "vue" | "react";
+  templateName: string;
+  baseUrl?: string;
+}): Promise<void> => {
+  generator.baseOptions.projectName = options.name;
+  generator.baseOptions.templateType = options.projectType;
+  generator.templateName = options.templateName;
+  if (options.baseUrl) {
+    generator.baseOptions.baseUrl = options.baseUrl;
+  }
+  await onInit(generator);
+  generator.render();
+};
+
+/**
  * 创建项目
  * @param {string} projectName - 项目名称
  * @returns {Promise<void>}
  */
-const create = async (
-  projectName: string = generator.baseOptions.projectName
-): Promise<void> => {
+const create = async (_projectName: string): Promise<void> => {
+  let projectName = _projectName;
+  if (!_projectName) {
+    const { name } = await inquirer.prompt([
+      {
+        name: "name",
+        type: "input",
+        message: "请输入项目名称:",
+        default: generator.baseOptions.projectName
+      }
+    ]);
+    projectName = name;
+  }
+
   const result = validateProjectName(projectName);
   if (!result.validForNewPackages) {
     console.error(chalk.red(`Invalid project name: "${name}"`));
@@ -34,6 +72,32 @@ const create = async (
   if (fs.existsSync(targetDir)) {
     fs.removeSync(targetDir);
   }
+
+  const types = await getProjectType();
+  const { projectType } = await inquirer.prompt([
+    {
+      name: "projectType",
+      type: "list",
+      message: "请选择创建项目类型",
+      choices: types.map(type => ({ name: type, value: type }))
+    }
+  ]);
+
+  const templates = await getTemplateNames(projectType);
+  const { templateChoice } = await inquirer.prompt([
+    {
+      name: "templateChoice",
+      type: "list",
+      message: "请选择模版类型",
+      choices: templates.map(template => ({ name: template, value: template }))
+    }
+  ]);
+
+  createTemplate({
+    name: projectName,
+    projectType,
+    templateName: templateChoice
+  });
 };
 
 export default create;

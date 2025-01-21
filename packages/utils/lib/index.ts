@@ -74,29 +74,38 @@ export const renderFile = (
 };
 
 /**
- * 写入文件
- * @param filePath 文件路径
- * @param content 内容
+ * 异步将内容写入指定文件路径的文件。
+ * 如果文件所在的目录不存在，则递归创建该目录。
+ * 如果内容为 undefined，则写入空字符串。
+ *
+ * @param filePath 要写入的文件路径。
+ * @param content 要写入的内容，可以是字符串或 Buffer，如果为 undefined，则写入空字符串。
+ * @returns 返回一个在写入操作完成时解析的 Promise。
  */
 export const writeFile = async (
   filePath: string,
   content: string | Buffer<ArrayBufferLike> | undefined
 ): Promise<void> => {
+  // 获取文件的目录路径
   const dir = path.dirname(filePath);
+  // 检查目录是否存在，如果不存在则递归创建
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
+  // 将内容写入文件，如果内容为 undefined，则写入空字符串
   fs.writeFileSync(filePath, content || "", {
     encoding: "utf-8"
   });
 };
 
 /**
- * 获取目录下所有文件
- * @param baseDir 目录
- * @returns
+ * 异步获取目录下所有文件路径
+ *
+ * @param baseDir {string} - 基础目录路径
+ * @returns {Promise<string[]>} - 返回一个Promise，解析为字符串数组，包含所有文件路径
  */
 export const getDirAllFiles = async (baseDir: string): Promise<string[]> => {
+  // 使用globby库匹配目录下所有文件，包括隐藏文件
   const files = await globby(["**/*"], { cwd: baseDir, dot: true });
   return files;
 };

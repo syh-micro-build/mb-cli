@@ -1,4 +1,5 @@
 import { writeFile } from "@mb-cli/utils/lib/index";
+import { merge } from "lodash";
 
 /**
  * 默认项目名称
@@ -45,7 +46,10 @@ export class GeneratorClass {
   /**
    * @param templateAllPath 模板路径
    */
-  templateAllPath: Map<string, string> = new Map();
+  templateAllPath: Map<string, string | Buffer> = new Map<
+    string,
+    string | Buffer
+  >();
 
   /**
    * @param pkg package.json
@@ -57,19 +61,23 @@ export class GeneratorClass {
    * @returns package.json
    */
   private getPackageJson(): Record<string, object | string> {
-    return {
-      name: this.baseOptions.projectName,
-      version: "0.0.0",
-      description: "",
-      main: "index.js",
-      scripts: {
-        dev: "vite",
-        build: "vite build",
-        serve: "vite preview"
+    return merge(
+      {
+        name: this.baseOptions.projectName,
+        version: "0.0.0",
+        description: "",
+        main: "index.js",
+        scripts: {
+          dev: "vite",
+          build: "vite build",
+          serve: "vite preview"
+        },
+        dependencies: {},
+        devDependencies: {}
       },
-      dependencies: {},
-      devDependencies: {}
-    };
+      this.pkg,
+      {}
+    );
   }
 
   /**
@@ -80,6 +88,7 @@ export class GeneratorClass {
 
     // 渲染模板
     const filePaths = this.templateAllPath.keys();
+
     for (const filePath of filePaths) {
       writeFile(`${base}/${filePath}`, this.templateAllPath.get(filePath));
     }
