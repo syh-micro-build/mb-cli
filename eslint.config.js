@@ -14,7 +14,11 @@ export default [
       quotes: "off",
       "function-paren-newline": "off",
       "dot-location": "off",
-      "@typescript-eslint/no-explicit-any": "error"
+      "@typescript-eslint/no-explicit-any": "error",
+      "implicit-arrow-linebreak": "off",
+      "object-property-newline": "off",
+      "@typescript-eslint/naming-convention": "off",
+      "lines-around-comment": "off"
     }
   }
 ];
