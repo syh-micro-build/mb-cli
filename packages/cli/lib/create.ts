@@ -5,8 +5,10 @@ import {
 } from "@mb-cli/project-template";
 import { getCliProgress } from "@mb-cli/utils/lib";
 import chalk from "chalk";
+import { exec } from "child_process";
 import fs from "fs-extra";
 import inquirer from "inquirer";
+import ora from "ora";
 import path from "path";
 import validateProjectName from "validate-npm-package-name";
 
@@ -20,7 +22,7 @@ const bar1 = getCliProgress();
 
 export const createTemplate = async (options: {
   name: string;
-  projectType: "vue" | "react";
+  projectType: string;
   templateName: string;
   baseUrl?: string;
 }): Promise<void> => {
@@ -31,12 +33,8 @@ export const createTemplate = async (options: {
     generator.baseOptions.baseUrl = options.baseUrl;
   }
   await onInit(generator);
+  const spinner = ora("正在创建项目，请稍候...").start();
   generator.render({
-    onRenderStart: () => {
-      console.log(
-        chalk.green(`开始创建项目: ${generator.baseOptions.projectName}`)
-      );
-    },
     onRenderProgress: (progress: number, t: number) => {
       if (progress === 1) {
         bar1.start(t, 1, {
@@ -53,6 +51,33 @@ export const createTemplate = async (options: {
       console.log(
         chalk.green(`项目创建成功: ${generator.baseOptions.projectName}`)
       );
+      spinner.text = "正在安装依赖，请稍候...";
+      const base = `${generator.baseOptions.baseUrl}/${generator.baseOptions.projectName}`;
+      exec(`cd ${base} && npm install`, (error, stdout, stderr) => {
+        if (error) {
+          console.error(`执行 npm i 时出错: ${error.message}`);
+          spinner.stop();
+          console.log(`
+            ✨ 项目创建成功！请手动安装依赖
+              cd ${generator.baseOptions.projectName}
+              npm install
+              npm run dev
+              `);
+          return;
+        }
+        if (stderr) {
+          console.error(`stderr: ${stderr}`);
+          spinner.stop();
+          return;
+        }
+        spinner.stop();
+        process.stdout.write("\r依赖安装完成。          \n");
+        console.log(`
+            ✨ 项目创建成功！
+              cd ${generator.baseOptions.projectName}
+              npm run dev
+              `);
+      });
     }
   });
 };
