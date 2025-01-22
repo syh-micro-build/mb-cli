@@ -84,7 +84,7 @@ export const createTemplate = async (options: {
 
 /**
  * 创建项目
- * @param {string} projectName - 项目名称
+ * @param {string} _projectName - 项目名称
  * @returns {Promise<void>}
  */
 const create = async (_projectName: string): Promise<void> => {
@@ -128,6 +128,7 @@ const create = async (_projectName: string): Promise<void> => {
     {
       name: "projectType",
       type: "list",
+      default: generator.baseOptions.templateType,
       message: "请选择创建项目类型",
       choices: types.map(type => ({ name: type, value: type }))
     }
