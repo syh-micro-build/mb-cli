@@ -83,6 +83,11 @@ export const getTemplateMap = async (): Promise<Map<string, string[]>> => {
   return templatesMap;
 };
 
+/**
+ * 初始化渲染模板
+ * @param api
+ * @returns Promise<void>
+ */
 export const onInit = async (api: GeneratorClass): Promise<void> => {
   const file = path.join(__dirname, `./${api.baseOptions.templateType}/index`);
 

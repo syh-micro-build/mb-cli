@@ -3,6 +3,7 @@ import {
   getTemplateNames,
   onInit
 } from "@mb-cli/project-template";
+import { getCliProgress } from "@mb-cli/utils/lib";
 import chalk from "chalk";
 import fs from "fs-extra";
 import inquirer from "inquirer";
@@ -11,6 +12,7 @@ import validateProjectName from "validate-npm-package-name";
 
 import { generator } from "./generator";
 
+const bar1 = getCliProgress();
 /**
  * 创建模版
  * @param options
@@ -29,7 +31,30 @@ export const createTemplate = async (options: {
     generator.baseOptions.baseUrl = options.baseUrl;
   }
   await onInit(generator);
-  generator.render();
+  generator.render({
+    onRenderStart: () => {
+      console.log(
+        chalk.green(`开始创建项目: ${generator.baseOptions.projectName}`)
+      );
+    },
+    onRenderProgress: (progress: number, t: number) => {
+      if (progress === 1) {
+        bar1.start(t, 1, {
+          speed: "N/A"
+        });
+        return;
+      }
+      bar1.update(progress);
+      if (progress === t) {
+        bar1.stop();
+      }
+    },
+    onRenderEnd: () => {
+      console.log(
+        chalk.green(`项目创建成功: ${generator.baseOptions.projectName}`)
+      );
+    }
+  });
 };
 
 /**

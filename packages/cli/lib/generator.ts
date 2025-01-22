@@ -11,6 +11,29 @@ export const defaultProjectName = "my-project";
  */
 export const defaultTemplateType = "vue";
 
+export interface RenderCallback {
+  /**
+   * 渲染开始回调
+   */
+  onRenderStart?: () => void;
+  /**
+   * 渲染进度回调
+   * @param progress 进度
+   * @param tools 总数量
+   */
+  onRenderProgress?: (progress: number, tools: number) => void;
+
+  /**
+   * 渲染结束回调
+   */
+  onRenderEnd?: () => void;
+
+  /**
+   * 渲染babel回调
+   */
+  onRenderBabel?: () => void;
+}
+
 export interface BaseOptions {
   /**
    * 项目名称
@@ -29,7 +52,7 @@ export interface BaseOptions {
 }
 
 /**
- * 生成器
+ * 生成器类
  */
 export class GeneratorClass {
   baseOptions: BaseOptions = {
@@ -83,21 +106,44 @@ export class GeneratorClass {
   /**
    * 渲染模板
    */
-  render(): void {
+  async render(callback: RenderCallback): Promise<void> {
+    // 调用渲染开始回调（如果有）
+    if (callback.onRenderStart) {
+      callback.onRenderStart();
+    }
+
     const base = `${this.baseOptions.baseUrl}/${this.baseOptions.projectName}`;
 
     // 渲染模板
-    const filePaths = this.templateAllPath.keys();
+    const filePaths = Array.from(this.templateAllPath.keys());
+    // 静态数据
+    const babelList = [
+      {
+        filePath: `${base}/package.json`,
+        content: JSON.stringify(this.getPackageJson(), null, 2)
+      }
+    ];
 
-    for (const filePath of filePaths) {
-      writeFile(`${base}/${filePath}`, this.templateAllPath.get(filePath));
+    for (const [index, filePath] of filePaths.entries()) {
+      const content = this.templateAllPath.get(filePath);
+      await writeFile(`${base}/${filePath}`, content);
+      if (callback.onRenderProgress) {
+        callback.onRenderProgress(index + 1, filePaths.length);
+      }
     }
 
-    // 生成package.json
-    writeFile(
-      `${base}/package.json`,
-      JSON.stringify(this.getPackageJson(), null, 2)
-    );
+    if (callback.onRenderBabel) {
+      callback.onRenderBabel();
+    }
+
+    for (const item of babelList) {
+      await writeFile(item.filePath, item.content);
+    }
+
+    // 调用渲染结束回调（如果有）
+    if (callback.onRenderEnd) {
+      callback.onRenderEnd();
+    }
   }
 }
 

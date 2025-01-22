@@ -1,3 +1,5 @@
+import colors from "ansi-colors";
+import cliProgress from "cli-progress";
 import ejs from "ejs";
 import fs from "fs";
 import { globby } from "globby";
@@ -109,3 +111,23 @@ export const getDirAllFiles = async (baseDir: string): Promise<string[]> => {
   const files = await globby(["**/*"], { cwd: baseDir, dot: true });
   return files;
 };
+
+/**
+ * 创建并返回一个CLI进度条实例
+ * 该函数用于初始化一个单一进度条，用于在命令行界面显示下载进度
+ *
+ * @returns {cliProgress.SingleBar} 初始化的进度条实例
+ */
+export const getCliProgress = (): cliProgress.SingleBar =>
+  new cliProgress.SingleBar(
+    {
+      format:
+        "下载进度 |" +
+        colors.green("{bar}") +
+        "| {percentage}% | {value}/{total}",
+      barCompleteChar: "\u2588",
+      barIncompleteChar: "\u2591",
+      hideCursor: true
+    },
+    cliProgress.Presets.shades_classic
+  );
