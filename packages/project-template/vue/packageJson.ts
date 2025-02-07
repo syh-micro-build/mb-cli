@@ -12,6 +12,8 @@ export default {
     }
   },
   "element-admin": {
+    private: false,
+    type: "module",
     scripts: {
       dev: "vite --mode base --host",
       build: 'run-p type-check "build-only -- --mode {1}" --',
@@ -103,5 +105,9 @@ export default {
       vitest: "^2.1.8",
       "vue-tsc": "^2.1.10"
     }
-  }
+  },
+  engines: {
+    node: ">=18.12.1",
+    npm: ">=8.19.2"
+  },
 };
