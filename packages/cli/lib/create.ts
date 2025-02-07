@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   getProjectType,
   getTemplateNames,
@@ -53,6 +54,7 @@ export const createTemplate = async (options: {
       );
       spinner.text = "正在安装依赖，请稍候...";
       const base = `${generator.baseOptions.baseUrl}/${generator.baseOptions.projectName}`;
+      // eslint-disable-next-line unused-imports/no-unused-vars
       exec(`cd ${base} && npm install`, (error, stdout, stderr) => {
         if (error) {
           console.error(`执行 npm i 时出错: ${error.message}`);
@@ -65,11 +67,11 @@ export const createTemplate = async (options: {
               `);
           return;
         }
-        if (stderr) {
-          console.error(`stderr: ${stderr}`);
-          spinner.stop();
-          return;
-        }
+        // if (stderr) {
+        //   console.error(`stderr: ${stderr}`);
+        //   spinner.stop();
+        //   return;
+        // }
         spinner.stop();
         process.stdout.write("\r依赖安装完成。          \n");
         console.log(`
