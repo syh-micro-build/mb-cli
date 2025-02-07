@@ -1,0 +1,29 @@
+{
+  "name": "@mb-cli/utils",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "shitao <1426591905@qq.com>",
+  "homepage": "https://github.com/syh-micro-build/mb-cli#readme",
+  "license": "ISC",
+  "main": "lib/cli-utils.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmmirror.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/syh-micro-build/mb-cli.git"
+  },
+  "scripts": {
+    "test": "node ./__tests__/cli-utils.test.js"
+  },
+  "bugs": {
+    "url": "https://github.com/syh-micro-build/mb-cli/issues"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@mb-cli/project-template",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "shitao <1426591905@qq.com>",
+  "homepage": "",
+  "license": "ISC",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmmirror.com/"
+  },
+  "scripts": {
+    "test": "node ./__tests__/typescript-config.test.js"
+  }
+}
