@@ -7,7 +7,7 @@ import { GeneratorRenderTemplate } from "../index";
 class GeneratorVue extends GeneratorRenderTemplate {
   onInit = async (api: GeneratorClass): Promise<void> => {
     await this.setTemplate(api);
-    if(api.templateName === "admin") {
+    if(api.templateName === "element-admin") {
       api.pkg = {
         scripts: {
           "dev": "vite --mode base --host",
