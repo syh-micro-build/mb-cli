@@ -1,6 +1,16 @@
 import { writeFile } from "@mb-cli/utils/lib/index";
 import { merge } from "lodash";
 
+export type ComuseType = boolean | string | number | undefined;
+
+export interface PackageType {
+  engines?: {
+    node?: string;
+    npm?: string;
+  };
+  [string: string]: ComuseType | PackageType | object;
+}
+
 /**
  * 默认项目名称
  */
@@ -77,13 +87,13 @@ export class GeneratorClass {
   /**
    * @param pkg package.json
    */
-  pkg: Record<string, object> = {};
+  pkg: PackageType = {};
 
   /**
    * 获取package.json
    * @returns package.json
    */
-  private getPackageJson(): Record<string, object | string> {
+  private getPackageJson(): PackageType {
     return merge(
       {
         name: this.baseOptions.projectName,

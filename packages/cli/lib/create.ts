@@ -4,7 +4,11 @@ import {
   getTemplateNames,
   onInit
 } from "@mb-cli/project-template";
-import { getCliProgress } from "@mb-cli/utils/lib";
+import {
+  getCliProgress,
+  checkNodeVersion,
+  checkNpmVersion
+} from "@mb-cli/utils/lib";
 import chalk from "chalk";
 import { exec } from "child_process";
 import fs from "fs-extra";
@@ -34,6 +38,25 @@ export const createTemplate = async (options: {
     generator.baseOptions.baseUrl = options.baseUrl;
   }
   await onInit(generator);
+
+  // 检查 node 版本
+  const packageJson = generator.pkg;
+  const requiredNodeVersion = packageJson.engines?.node;
+  const requiredNpmVersion = packageJson.engines?.npm;
+  if (requiredNodeVersion) {
+    const result = checkNodeVersion(requiredNodeVersion);
+    if (!result) {
+      process.exit(1);
+    }
+  }
+
+  if (requiredNpmVersion) {
+    const result = checkNpmVersion(requiredNpmVersion);
+    if (!result) {
+      process.exit(1);
+    }
+  }
+
   const spinner = ora("正在创建项目，请稍候...").start();
   generator.render({
     onRenderProgress: (progress: number, t: number) => {

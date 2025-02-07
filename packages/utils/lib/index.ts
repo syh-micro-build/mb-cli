@@ -1,4 +1,5 @@
 import colors from "ansi-colors";
+import { execSync } from "child_process";
 import cliProgress from "cli-progress";
 import ejs from "ejs";
 import fs from "fs";
@@ -6,6 +7,7 @@ import { globby } from "globby";
 import { isBinaryFileSync } from "isbinaryfile";
 import path from "path";
 import resolve from "resolve";
+import semver from "semver";
 
 const replaceBlock = /<%# REPLACE %>([\s\S]*?)<%# END_REPLACE %>/g;
 
@@ -131,3 +133,43 @@ export const getCliProgress = (): cliProgress.SingleBar =>
     },
     cliProgress.Presets.shades_classic
   );
+
+/**
+ * 校验当前 Node.js 版本是否符合 package.json 中的要求
+ * @param requiredNodeVersion - package.json 中要求的 Node.js 版本
+ */
+export const checkNodeVersion = (requiredNodeVersion: string): boolean => {
+  const currentNodeVersion = process.version;
+  if (!semver.satisfies(currentNodeVersion, requiredNodeVersion)) {
+    console.error(
+      colors.red(
+        `当前 Node.js 版本 ${currentNodeVersion} 不符合要求。请使用 Node.js 版本 ${requiredNodeVersion} 或更高版本。`
+      )
+    );
+    return false;
+  }
+  return true;
+};
+
+/**
+ * 校验当前 npm 版本是否符合要求
+ * @param requiredNpmVersion - package.json 中要求的 npm 版本
+ */
+export const checkNpmVersion = (requiredNpmVersion: string): boolean => {
+  try {
+    // eslint-disable-next-line newline-per-chained-call
+    const currentNpmVersion = execSync("npm --version").toString().trim();
+    if (!semver.satisfies(currentNpmVersion, requiredNpmVersion)) {
+      console.error(
+        colors.red(
+          `当前 npm 版本 ${currentNpmVersion} 不符合要求。请使用 npm 版本 ${requiredNpmVersion} 或更高版本。`
+        )
+      );
+      return false;
+    }
+    return true;
+  } catch {
+    console.error(colors.red("无法获取 npm 版本，请确保 npm 已正确安装。"));
+    return false;
+  }
+};
