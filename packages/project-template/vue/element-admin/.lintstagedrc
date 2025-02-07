@@ -1,0 +1,8 @@
+{
+  "*.{js,jsx,ts,tsx}": ["eslint", "prettier --write"],
+  "*.vue": ["prettier --write", "stylelint --fix"],
+  "package.json": ["prettier --write"],
+  "{!(package)*.json,*.code-snippets,.!(browserslist)*rc}": ["prettier --parser json --write"],
+  "*.{scss,less,styl,css,html}": ["stylelint --fix", "prettier --write"],
+  "**/node_modules/**": []
+}

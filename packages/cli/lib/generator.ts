@@ -89,7 +89,6 @@ export class GeneratorClass {
         name: this.baseOptions.projectName,
         version: "0.0.0",
         description: "",
-        main: "index.js",
         scripts: {
           dev: "vite",
           build: "vite build",
