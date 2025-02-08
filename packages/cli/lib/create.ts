@@ -145,7 +145,8 @@ const create = async (_projectName: string): Promise<void> => {
 
   const targetDir = path.resolve(cwd, projectName || ".");
   if (fs.existsSync(targetDir)) {
-    fs.removeSync(targetDir);
+    console.log(chalk.red(`项目名称${projectName}已存在,请重新命名后再次创建`));
+    process.exit(1);
   }
 
   const types = await getProjectType();
