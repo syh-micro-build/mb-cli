@@ -1,14 +1,14 @@
 import { GeneratorClass } from "@mb-cli/cli/lib/generator";
 import { renderFile, getDirAllFiles } from "@mb-cli/utils/lib";
-import packageJson from './packageJson'
 import path from "path";
 
 import { GeneratorRenderTemplate } from "../index";
+import packageJson from "./packageJson";
 
 class GeneratorVue extends GeneratorRenderTemplate {
   onInit = async (api: GeneratorClass): Promise<void> => {
     await this.setTemplate(api);
-    api.pkg  = packageJson[api.templateName];
+    api.pkg = packageJson[api.templateName];
   };
 
   /**

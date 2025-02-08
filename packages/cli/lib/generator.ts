@@ -1,4 +1,4 @@
-import { writeFile } from "@mb-cli/utils/lib/index";
+import { sortObject, writeFile } from "@mb-cli/utils/lib/index";
 import { merge } from "lodash";
 
 export type ComuseType = boolean | string | number | undefined;
@@ -94,21 +94,48 @@ export class GeneratorClass {
    * @returns package.json
    */
   private getPackageJson(): PackageType {
-    return merge(
-      {
-        name: this.baseOptions.projectName,
-        version: "0.0.0",
-        description: "",
-        scripts: {
-          dev: "vite",
-          build: "vite build",
-          serve: "vite preview"
+    return sortObject(
+      merge(
+        {
+          name: this.baseOptions.projectName,
+          version: "0.0.0",
+          description: "",
+          scripts: {
+            dev: "vite",
+            build: "vite build",
+            serve: "vite preview"
+          },
+          dependencies: {},
+          devDependencies: {}
         },
-        dependencies: {},
-        devDependencies: {}
-      },
-      this.pkg,
-      {}
+        this.pkg,
+        {}
+      ),
+      [
+        "name",
+        "version",
+        "private",
+        "type",
+        "description",
+        "author",
+        "scripts",
+        "main",
+        "module",
+        "browser",
+        "jsDelivr",
+        "unpkg",
+        "files",
+        "dependencies",
+        "devDependencies",
+        "peerDependencies",
+        "vue",
+        "babel",
+        "eslintConfig",
+        "prettier",
+        "postcss",
+        "browserslist",
+        "jest"
+      ]
     );
   }
 

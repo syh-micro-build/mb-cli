@@ -104,10 +104,15 @@ export default {
       "vite-plugin-svg-icons": "^2.0.1",
       vitest: "^2.1.8",
       "vue-tsc": "^2.1.10"
+    },
+    engines: {
+      node: ">=18.12.1",
+      npm: ">=8.19.2"
+    },
+    config: {
+      commitizen: {
+        path: "node_modules/cz-git"
+      }
     }
-  },
-  engines: {
-    node: ">=18.12.1",
-    npm: ">=8.19.2"
-  },
+  }
 };

@@ -173,3 +173,30 @@ export const checkNpmVersion = (requiredNpmVersion: string): boolean => {
     return false;
   }
 };
+
+export const sortObject = <T>(
+  obj: T,
+  keyOrder: string[],
+  dontSortByUnicode?: boolean
+): T => {
+  const res = {};
+
+  if (keyOrder) {
+    keyOrder.forEach((key: string) => {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        res[key] = obj[key];
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+        delete obj[key];
+      }
+    });
+  }
+
+  const keys = Object.keys(obj as object);
+
+  !dontSortByUnicode && keys.sort();
+  keys.forEach(key => {
+    res[key] = obj[key];
+  });
+
+  return res as T;
+};
