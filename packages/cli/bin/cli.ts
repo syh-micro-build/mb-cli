@@ -3,6 +3,7 @@ import { program } from "commander";
 
 import create from "../lib/create";
 import tel from "../lib/tel";
+import ui from "../lib/ui";
 
 program
   .version(`@mb-cli/cli ${require("../package.json").version}`)
@@ -26,7 +27,7 @@ program
   .command("ui")
   .description("启动可视化ui 窗口")
   .action(() => {
-    require("../lib/ui");
+    ui();
   });
 
 program.on("command:*", ([cmd]) => {

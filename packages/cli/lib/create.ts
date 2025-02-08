@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   getProjectType,
   getTemplateNames,
@@ -77,8 +76,9 @@ export const createTemplate = async (options: {
       );
       spinner.text = "正在安装依赖，请稍候...";
       const base = `${generator.baseOptions.baseUrl}/${generator.baseOptions.projectName}`;
-      // eslint-disable-next-line unused-imports/no-unused-vars
-      exec(`cd ${base} && npm install`, (error, stdout, stderr) => {
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      exec(`cd ${base} && npm install`, (error, _stdout, _stderr) => {
         if (error) {
           console.error(`执行 npm i 时出错: ${error.message}`);
           spinner.stop();

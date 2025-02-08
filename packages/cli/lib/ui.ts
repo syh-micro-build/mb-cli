@@ -1,5 +1,5 @@
 const initUi = (): void => {
-  console.log("tel");
+  console.log("ui");
 };
 
 export default initUi;
