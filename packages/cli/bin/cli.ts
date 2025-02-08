@@ -2,6 +2,7 @@ import chalk from "chalk";
 import { program } from "commander";
 
 import create from "../lib/create";
+import tel from "../lib/tel";
 
 program
   .version(`@mb-cli/cli ${require("../package.json").version}`)
@@ -12,6 +13,13 @@ program
   .description("创建项目")
   .action((name: string) => {
     create(name);
+  });
+
+program
+  .command("tel")
+  .description("查看模版列表")
+  .action(() => {
+    tel();
   });
 
 program
