@@ -3,7 +3,7 @@ import { execSync } from "child_process";
 import cliProgress from "cli-progress";
 import ejs from "ejs";
 import fs from "fs";
-import { globby } from "globby";
+import globby from "globby";
 import { isBinaryFileSync } from "isbinaryfile";
 import path from "path";
 import resolve from "resolve";
