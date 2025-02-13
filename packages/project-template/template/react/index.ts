@@ -1,8 +1,8 @@
-import { GeneratorClass } from "@mb-cli/cli/lib/generator";
-import { renderFile, getDirAllFiles } from "@mb-cli/utils/lib";
+import { renderFile, getDirAllFiles } from "@mb-cli/utils";
 import path from "path";
 
-import { GeneratorRenderTemplate } from "../index";
+import { GeneratorRenderTemplate } from "../../src/common/GeneratorRenderTemplate";
+import { packageDirectory } from "pkg-dir";
 
 class GeneratorReact extends GeneratorRenderTemplate {
   /**
@@ -12,9 +12,14 @@ class GeneratorReact extends GeneratorRenderTemplate {
    * @param api GeneratorClass实例，包含模板类型和项目基础选项
    * @returns Promise<void> 无返回值
    */
-  setTemplate = async (api: GeneratorClass): Promise<void> => {
+  setTemplate = async (api: any): Promise<void> => {
     // 构建模板目录的绝对路径
-    const dir = path.resolve(__dirname, `./${api.templateName}`);
+    const rootDir = (await packageDirectory()) as string;
+    // 获取当前文件所在目录的路径
+    const dir = path.join(
+      rootDir,
+      `./template/${api.baseOptions.templateType}/${api.templateName}`
+    );
 
     // 获取模板目录下所有文件的路径
     const result = await getDirAllFiles(dir);
@@ -34,7 +39,7 @@ class GeneratorReact extends GeneratorRenderTemplate {
     }
   };
 
-  onInit = async (api: GeneratorClass): Promise<void> => {
+  onInit = async (api: any): Promise<void> => {
     await this.setTemplate(api);
     api.pkg = {
       dependencies: {

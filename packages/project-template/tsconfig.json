@@ -1,0 +1,19 @@
+{
+  "target": "es2015",
+  "compilerOptions": {
+    "strict": true,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "outDir": "./dist",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["template/react/*.ts", "template/react/vue/*.ts", "src/**.ts"],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "template/react/vue/default-vue",
+    "template/react/vue/element-admin",
+    "template/react/default-react"
+  ]
+}
