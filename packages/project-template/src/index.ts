@@ -1,7 +1,6 @@
 import vue from "../template/vue/index";
 
 import path from "path";
-import { packageDirectory } from "pkg-dir";
 
 import react from "../template/react/index";
 
@@ -15,7 +14,8 @@ import react from "../template/react/index";
  */
 export const getProjectType = async (): Promise<string[]> => {
   const globby = require("globby");
-  const rootDir = (await packageDirectory()) as string;
+  const pkgDir = require("pkg-dir");
+  const rootDir = await pkgDir(__dirname);
   // 获取当前文件所在目录的路径
   const dir = path.join(rootDir, "./template");
 
@@ -38,8 +38,8 @@ export const getProjectType = async (): Promise<string[]> => {
  */
 export const getTemplateNames = async (type: string): Promise<string[]> => {
   const globby = require("globby");
-  // 获取当前目录的路径
-  const rootDir = (await packageDirectory()) as string;
+  const pkgDir = require("pkg-dir");
+  const rootDir = await pkgDir(__dirname);
   // 获取当前文件所在目录的路径
   const dir = path.join(rootDir, "./template");
 

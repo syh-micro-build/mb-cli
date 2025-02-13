@@ -2,7 +2,6 @@ import { renderFile, getDirAllFiles } from "@mb-cli/utils";
 import path from "path";
 
 import { GeneratorRenderTemplate } from "../../src/common/GeneratorRenderTemplate";
-import { packageDirectory } from "pkg-dir";
 
 class GeneratorReact extends GeneratorRenderTemplate {
   /**
@@ -13,8 +12,8 @@ class GeneratorReact extends GeneratorRenderTemplate {
    * @returns Promise<void> 无返回值
    */
   setTemplate = async (api: any): Promise<void> => {
-    // 构建模板目录的绝对路径
-    const rootDir = (await packageDirectory()) as string;
+    const pkgDir = require("pkg-dir");
+    const rootDir = await pkgDir(__dirname);
     // 获取当前文件所在目录的路径
     const dir = path.join(
       rootDir,
