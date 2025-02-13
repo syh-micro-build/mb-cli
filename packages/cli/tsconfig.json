@@ -1,0 +1,14 @@
+{
+  "target": "es2015",
+  "compilerOptions": {
+    "strict": true,
+    "declaration": true,
+    "declarationMap": true,
+    "downlevelIteration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "./dist",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["./bin/*.ts", "./lib/*.ts"],
+  "exclude": ["dist", "node_modules"]
+}

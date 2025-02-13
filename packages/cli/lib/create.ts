@@ -7,7 +7,7 @@ import {
   getCliProgress,
   checkNodeVersion,
   checkNpmVersion
-} from "@mb-cli/utils/lib";
+} from "@mb-cli/utils";
 import chalk from "chalk";
 import { exec } from "child_process";
 import fs from "fs-extra";

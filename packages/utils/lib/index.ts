@@ -3,8 +3,8 @@ import { execSync } from "child_process";
 import cliProgress from "cli-progress";
 import ejs from "ejs";
 import fs from "fs";
-import globby from "globby";
 import { isBinaryFileSync } from "isbinaryfile";
+import { cloneDeep } from "lodash";
 import path from "path";
 import resolve from "resolve";
 import semver from "semver";
@@ -109,6 +109,7 @@ export const writeFile = async (
  * @returns {Promise<string[]>} - 返回一个Promise，解析为字符串数组，包含所有文件路径
  */
 export const getDirAllFiles = async (baseDir: string): Promise<string[]> => {
+  const globby = require("globby");
   // 使用globby库匹配目录下所有文件，包括隐藏文件
   const files = await globby(["**/*"], { cwd: baseDir, dot: true });
   return files;
@@ -174,29 +175,32 @@ export const checkNpmVersion = (requiredNpmVersion: string): boolean => {
   }
 };
 
-export const sortObject = <T>(
-  obj: T,
+export const sortObject = (
+  obj: any,
   keyOrder: string[],
   dontSortByUnicode?: boolean
-): T => {
-  const res = {};
+): any => {
+  const data = cloneDeep(obj);
+  const res: any = {};
 
   if (keyOrder) {
     keyOrder.forEach((key: string) => {
-      if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        res[key] = obj[key];
-        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-        delete obj[key];
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        res[key] = data[key];
+        if (data[key]) {
+          // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+          delete data[key];
+        }
       }
     });
   }
 
-  const keys = Object.keys(obj as object);
+  const keys = Object.keys(data as object);
 
   !dontSortByUnicode && keys.sort();
   keys.forEach(key => {
-    res[key] = obj[key];
+    res[key] = data[key];
   });
 
-  return res as T;
+  return res;
 };
