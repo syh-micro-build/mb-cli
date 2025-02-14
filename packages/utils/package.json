@@ -28,6 +28,7 @@
     "registry": "https://registry.npmmirror.com/"
   },
   "dependencies": {
+    "@mb-cli/typescript-config": "file:../typescript-config",
     "ansi-colors": "^4.1.3",
     "cli-progress": "^3.12.0",
     "ejs": "^3.1.10",

@@ -9,6 +9,7 @@
   "scripts": {
     "prepare": "husky",
     "lint": "eslint . --fix \"packages/**/*.{ts}\"",
+    "install": "pnpm i",
     "commitlint": "commitlint --edit",
     "build": "lerna run build"
   },
@@ -34,6 +35,10 @@
     "mb-prettier-config": "^1.0.3",
     "prettier": "^3.4.2",
     "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=18.19.0",
+    "pnpm": ">=9.15.3"
   },
   "husky": {
     "hooks": {

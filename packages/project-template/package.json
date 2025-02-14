@@ -28,6 +28,7 @@
     "registry": "https://registry.npmmirror.com/"
   },
   "dependencies": {
+    "@mb-cli/typescript-config": "file:../typescript-config",
     "@mb-cli/utils": "file:../utils",
     "globby": "^14.1.0",
     "pkg-dir": "^8.0.0",

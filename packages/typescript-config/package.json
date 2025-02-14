@@ -1,0 +1,29 @@
+{
+  "name": "@mb-cli/typescript-config",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "homepage": "https://github.com/syh-micro-build/mb-cli#readme",
+  "bugs": {
+    "url": "https://github.com/syh-micro-build/mb-cli/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/syh-micro-build/mb-cli.git"
+  },
+  "license": "ISC",
+  "author": "shitao <1426591905@qq.com>",
+  "scripts": {
+    "test": "node ./__tests__/typescript-config.test.js"
+  },
+  "files": [
+    "lib"
+  ],
+  "main": "lib/typescript-config.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmmirror.com"
+  }
+}
