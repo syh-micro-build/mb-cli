@@ -1,10 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   getProjectType,
   getTemplateNames,
   onInit
 } from "@mb-cli/project-template";
-import { getCliProgress } from "@mb-cli/utils/lib";
+import {
+  getCliProgress,
+  checkNodeVersion,
+  checkNpmVersion
+} from "@mb-cli/utils";
 import chalk from "chalk";
 import { exec } from "child_process";
 import fs from "fs-extra";
@@ -34,6 +37,25 @@ export const createTemplate = async (options: {
     generator.baseOptions.baseUrl = options.baseUrl;
   }
   await onInit(generator);
+
+  // 检查 node 版本
+  const packageJson = generator.pkg;
+  const requiredNodeVersion = packageJson.engines?.node;
+  const requiredNpmVersion = packageJson.engines?.npm;
+  if (requiredNodeVersion) {
+    const result = checkNodeVersion(requiredNodeVersion);
+    if (!result) {
+      process.exit(1);
+    }
+  }
+
+  if (requiredNpmVersion) {
+    const result = checkNpmVersion(requiredNpmVersion);
+    if (!result) {
+      process.exit(1);
+    }
+  }
+
   const spinner = ora("正在创建项目，请稍候...").start();
   generator.render({
     onRenderProgress: (progress: number, t: number) => {
@@ -54,8 +76,9 @@ export const createTemplate = async (options: {
       );
       spinner.text = "正在安装依赖，请稍候...";
       const base = `${generator.baseOptions.baseUrl}/${generator.baseOptions.projectName}`;
-      // eslint-disable-next-line unused-imports/no-unused-vars
-      exec(`cd ${base} && npm install`, (error, stdout, stderr) => {
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      exec(`cd ${base} && npm install`, (error, _stdout, _stderr) => {
         if (error) {
           console.error(`执行 npm i 时出错: ${error.message}`);
           spinner.stop();
@@ -122,7 +145,8 @@ const create = async (_projectName: string): Promise<void> => {
 
   const targetDir = path.resolve(cwd, projectName || ".");
   if (fs.existsSync(targetDir)) {
-    fs.removeSync(targetDir);
+    console.log(chalk.red(`项目名称${projectName}已存在,请重新命名后再次创建`));
+    process.exit(1);
   }
 
   const types = await getProjectType();

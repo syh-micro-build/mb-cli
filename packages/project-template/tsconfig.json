@@ -1,0 +1,14 @@
+{
+  "extends": ["@mb-cli/typescript-config/tsconfig.json"],
+  "compilerOptions": {
+    "outDir": "./dist"
+  },
+  "include": ["template/react/*.ts", "template/react/vue/*.ts", "src/**.ts"],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "template/react/vue/default-vue",
+    "template/react/vue/element-admin",
+    "template/react/default-react"
+  ]
+}

@@ -1,5 +1,15 @@
-import { writeFile } from "@mb-cli/utils/lib/index";
-import { merge } from "lodash";
+import { sortObject, writeFile } from "@mb-cli/utils";
+import { merge } from "lodash-es";
+
+export type ComuseType = boolean | string | number | undefined;
+
+export interface PackageType {
+  engines?: {
+    node?: string;
+    npm?: string;
+  };
+  [string: string]: ComuseType | PackageType | object;
+}
 
 /**
  * 默认项目名称
@@ -77,28 +87,55 @@ export class GeneratorClass {
   /**
    * @param pkg package.json
    */
-  pkg: Record<string, object> = {};
+  pkg: PackageType = {};
 
   /**
    * 获取package.json
    * @returns package.json
    */
-  private getPackageJson(): Record<string, object | string> {
-    return merge(
-      {
-        name: this.baseOptions.projectName,
-        version: "0.0.0",
-        description: "",
-        scripts: {
-          dev: "vite",
-          build: "vite build",
-          serve: "vite preview"
+  private getPackageJson(): PackageType {
+    return sortObject(
+      merge(
+        {
+          name: this.baseOptions.projectName,
+          version: "0.0.0",
+          description: "",
+          scripts: {
+            dev: "vite",
+            build: "vite build",
+            serve: "vite preview"
+          },
+          dependencies: {},
+          devDependencies: {}
         },
-        dependencies: {},
-        devDependencies: {}
-      },
-      this.pkg,
-      {}
+        this.pkg,
+        {}
+      ),
+      [
+        "name",
+        "version",
+        "private",
+        "type",
+        "description",
+        "author",
+        "scripts",
+        "main",
+        "module",
+        "browser",
+        "jsDelivr",
+        "unpkg",
+        "files",
+        "dependencies",
+        "devDependencies",
+        "peerDependencies",
+        "vue",
+        "babel",
+        "eslintConfig",
+        "prettier",
+        "postcss",
+        "browserslist",
+        "jest"
+      ]
     );
   }
 
@@ -122,6 +159,8 @@ export class GeneratorClass {
         content: JSON.stringify(this.getPackageJson(), null, 2)
       }
     ];
+
+    console.log(this.templateAllPath.keys());
 
     for (const [index, filePath] of filePaths.entries()) {
       const content = this.templateAllPath.get(filePath);

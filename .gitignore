@@ -10,10 +10,7 @@ CODEOWNERS
 .output
 
 
-**/*.svg
-**/*.sh
-
-public
+ 
 .npmrc
 **/*-lock.yaml
 **/*-lock.json

@@ -12,14 +12,13 @@
   },
   "license": "ISC",
   "author": "shitao <1426591905@qq.com>",
+  "type": "module",
   "scripts": {
     "test": "node ./__tests__/cli.test.js",
-    "serve": "tsx ./bin/cli.ts"
+    "serve": "tsx ./bin/cli.ts",
+    "build": "rollup -c --bundleConfigAsCjs"
   },
   "bin": "tsx ./bin/cli.ts",
-  "files": [
-    "lib"
-  ],
   "main": "lib/cli.js",
   "directories": {
     "lib": "lib",
@@ -27,5 +26,25 @@
   },
   "publishConfig": {
     "registry": "https://registry.npmmirror.com/"
+  },
+  "dependencies": {
+    "@mb-cli/project-template": "file:../project-template",
+    "@mb-cli/typescript-config": "file:../typescript-config",
+    "@mb-cli/utils": "file:../utils",
+    "commander": "^13.1.0",
+    "fs-extra": "^11.3.0",
+    "inquirer": "^8.0.0",
+    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
+    "ora": "^5.3.0",
+    "tslib": "^2.8.1",
+    "validate-npm-package-name": "^6.0.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-json": "^6.1.0",
+    "@types/fs-extra": "^11.0.4",
+    "@types/inquirer": "^9.0.7",
+    "@types/lodash": "^4.17.15",
+    "@types/lodash-es": "^4.17.12"
   }
 }

@@ -2,28 +2,48 @@
   "name": "@mb-cli/utils",
   "version": "0.0.0",
   "description": "> TODO: description",
-  "author": "shitao <1426591905@qq.com>",
   "homepage": "https://github.com/syh-micro-build/mb-cli#readme",
-  "license": "ISC",
-  "main": "lib/cli-utils.js",
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
-  },
-  "files": [
-    "lib"
-  ],
-  "publishConfig": {
-    "registry": "https://registry.npmmirror.com/"
+  "bugs": {
+    "url": "https://github.com/syh-micro-build/mb-cli/issues"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/syh-micro-build/mb-cli.git"
   },
+  "license": "ISC",
+  "author": "shitao <1426591905@qq.com>",
+  "type": "module",
   "scripts": {
-    "test": "node ./__tests__/cli-utils.test.js"
+    "test": "node ./__tests__/cli-utils.test.js",
+    "build": "rollup -c --bundleConfigAsCjs"
   },
-  "bugs": {
-    "url": "https://github.com/syh-micro-build/mb-cli/issues"
+  "main": "./lib/index.ts",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs"
+    }
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmmirror.com/"
+  },
+  "dependencies": {
+    "@mb-cli/typescript-config": "file:../typescript-config",
+    "ansi-colors": "^4.1.3",
+    "cli-progress": "^3.12.0",
+    "ejs": "^3.1.10",
+    "globby": "^14.1.0",
+    "isbinaryfile": "^5.0.4",
+    "lodash-es": "^4.17.21",
+    "resolve": "^1.22.10",
+    "tslib": "^2.8.1",
+    "validate-npm-package-name": "^6.0.0",
+    "yaml-front-matter": "^4.1.1"
+  },
+  "devDependencies": {
+    "@types/cli-progress": "^3.11.6",
+    "@types/ejs": "^3.1.5",
+    "@types/lodash-es": "^4.17.12",
+    "@types/yaml-front-matter": "^4.1.3"
   }
 }

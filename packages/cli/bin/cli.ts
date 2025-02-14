@@ -2,9 +2,12 @@ import chalk from "chalk";
 import { program } from "commander";
 
 import create from "../lib/create";
+import tel from "../lib/tel";
+import ui from "../lib/ui";
+import packageJson from "../package.json";
 
 program
-  .version(`@mb-cli/cli ${require("../package.json").version}`)
+  .version(`@mb-cli/cli ${packageJson.version}`)
   .usage("<command> [options]");
 
 program
@@ -15,10 +18,17 @@ program
   });
 
 program
+  .command("tel")
+  .description("查看模版列表")
+  .action(() => {
+    tel();
+  });
+
+program
   .command("ui")
   .description("启动可视化ui 窗口")
   .action(() => {
-    require("../lib/ui");
+    ui();
   });
 
 program.on("command:*", ([cmd]) => {

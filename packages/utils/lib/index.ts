@@ -1,11 +1,16 @@
 import colors from "ansi-colors";
+import { execSync } from "child_process";
 import cliProgress from "cli-progress";
 import ejs from "ejs";
 import fs from "fs";
 import { globby } from "globby";
 import { isBinaryFileSync } from "isbinaryfile";
-import path from "path";
+import { cloneDeep } from "lodash-es";
+import path, { dirname } from "path";
 import resolve from "resolve";
+import semver from "semver";
+import { fileURLToPath } from "url";
+import yaml from "yaml-front-matter";
 
 const replaceBlock = /<%# REPLACE %>([\s\S]*?)<%# END_REPLACE %>/g;
 
@@ -35,7 +40,7 @@ export const renderFile = (
   //   - !!js/regexp /foo/
   //   - !!js/regexp /bar/
   // ---
-  const yaml = require("yaml-front-matter");
+
   const parsed = yaml.loadFront(template);
   const content = parsed.__content;
   let finalTemplate = content.trim() + `\n`;
@@ -62,7 +67,7 @@ export const renderFile = (
           const replaces = replaceMatch.map((m: string) =>
             m.replace(replaceBlock, "$1").trim()
           );
-          parsed.replace.forEach((r: string, i: string) => {
+          parsed.replace.forEach((r: string, i: number) => {
             finalTemplate = finalTemplate.replace(r, replaces[i]);
           });
         }
@@ -131,3 +136,84 @@ export const getCliProgress = (): cliProgress.SingleBar =>
     },
     cliProgress.Presets.shades_classic
   );
+
+/**
+ * 校验当前 Node.js 版本是否符合 package.json 中的要求
+ * @param requiredNodeVersion - package.json 中要求的 Node.js 版本
+ */
+export const checkNodeVersion = (requiredNodeVersion: string): boolean => {
+  const currentNodeVersion = process.version;
+  if (!semver.satisfies(currentNodeVersion, requiredNodeVersion)) {
+    console.error(
+      colors.red(
+        `当前 Node.js 版本 ${currentNodeVersion} 不符合要求。请使用 Node.js 版本 ${requiredNodeVersion} 或更高版本。`
+      )
+    );
+    return false;
+  }
+  return true;
+};
+
+/**
+ * 校验当前 npm 版本是否符合要求
+ * @param requiredNpmVersion - package.json 中要求的 npm 版本
+ */
+export const checkNpmVersion = (requiredNpmVersion: string): boolean => {
+  try {
+    // eslint-disable-next-line newline-per-chained-call
+    const currentNpmVersion = execSync("npm --version").toString().trim();
+    if (!semver.satisfies(currentNpmVersion, requiredNpmVersion)) {
+      console.error(
+        colors.red(
+          `当前 npm 版本 ${currentNpmVersion} 不符合要求。请使用 npm 版本 ${requiredNpmVersion} 或更高版本。`
+        )
+      );
+      return false;
+    }
+    return true;
+  } catch {
+    console.error(colors.red("无法获取 npm 版本，请确保 npm 已正确安装。"));
+    return false;
+  }
+};
+
+export const sortObject = (
+  obj: any,
+  keyOrder: string[],
+  dontSortByUnicode?: boolean
+): any => {
+  const data = cloneDeep(obj);
+  const res: any = {};
+
+  if (keyOrder) {
+    keyOrder.forEach((key: string) => {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        res[key] = data[key];
+        if (data[key]) {
+          // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+          delete data[key];
+        }
+      }
+    });
+  }
+
+  const keys = Object.keys(data as object);
+
+  !dontSortByUnicode && keys.sort();
+  keys.forEach(key => {
+    res[key] = data[key];
+  });
+
+  return res;
+};
+
+/**
+ *
+ * @returns 项目根路径
+ */
+export const getProjectRootPath = async (): Promise<string> => {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+  const array = __dirname.split("/packages");
+  return array[0] || "";
+};
