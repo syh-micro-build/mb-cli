@@ -6,7 +6,9 @@
     "declarationMap": true,
     "emitDeclarationOnly": true,
     "outDir": "./dist",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
   "include": ["template/react/*.ts", "template/react/vue/*.ts", "src/**.ts"],
   "exclude": [

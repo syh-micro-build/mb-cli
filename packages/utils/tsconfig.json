@@ -1,12 +1,18 @@
 {
   "target": "es2015",
   "compilerOptions": {
+    "target": "ESNext", // 或者其他适合的版本
+    "module": "ESNext", // 或 "module": "ES6"
+    "moduleResolution": "node",
     "strict": true,
     "declaration": true,
     "declarationMap": true,
+    "downlevelIteration": true,
     "emitDeclarationOnly": true,
     "outDir": "./dist",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
   "include": ["./lib/*.ts"],
   "exclude": ["dist", "node_modules"]

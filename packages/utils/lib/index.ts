@@ -3,11 +3,14 @@ import { execSync } from "child_process";
 import cliProgress from "cli-progress";
 import ejs from "ejs";
 import fs from "fs";
+import { globby } from "globby";
 import { isBinaryFileSync } from "isbinaryfile";
-import { cloneDeep } from "lodash";
-import path from "path";
+import { cloneDeep } from "lodash-es";
+import path, { dirname } from "path";
 import resolve from "resolve";
 import semver from "semver";
+import { fileURLToPath } from "url";
+import yaml from "yaml-front-matter";
 
 const replaceBlock = /<%# REPLACE %>([\s\S]*?)<%# END_REPLACE %>/g;
 
@@ -37,7 +40,7 @@ export const renderFile = (
   //   - !!js/regexp /foo/
   //   - !!js/regexp /bar/
   // ---
-  const yaml = require("yaml-front-matter");
+
   const parsed = yaml.loadFront(template);
   const content = parsed.__content;
   let finalTemplate = content.trim() + `\n`;
@@ -64,7 +67,7 @@ export const renderFile = (
           const replaces = replaceMatch.map((m: string) =>
             m.replace(replaceBlock, "$1").trim()
           );
-          parsed.replace.forEach((r: string, i: string) => {
+          parsed.replace.forEach((r: string, i: number) => {
             finalTemplate = finalTemplate.replace(r, replaces[i]);
           });
         }
@@ -109,7 +112,6 @@ export const writeFile = async (
  * @returns {Promise<string[]>} - 返回一个Promise，解析为字符串数组，包含所有文件路径
  */
 export const getDirAllFiles = async (baseDir: string): Promise<string[]> => {
-  const globby = require("globby");
   // 使用globby库匹配目录下所有文件，包括隐藏文件
   const files = await globby(["**/*"], { cwd: baseDir, dot: true });
   return files;
@@ -203,4 +205,15 @@ export const sortObject = (
   });
 
   return res;
+};
+
+/**
+ *
+ * @returns 项目根路径
+ */
+export const getProjectRootPath = async (): Promise<string> => {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+  const array = __dirname.split("/packages");
+  return array[0] || "";
 };

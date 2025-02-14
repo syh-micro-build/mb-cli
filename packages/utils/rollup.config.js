@@ -5,11 +5,6 @@ export default defineConfig({
   input: "./lib/index.ts",
   output: [
     {
-      file: "dist/index.cjs",
-      format: "cjs",
-      sourcemap: true
-    },
-    {
       file: "dist/index.mjs",
       format: "es",
       sourcemap: true

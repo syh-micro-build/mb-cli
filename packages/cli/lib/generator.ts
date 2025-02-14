@@ -1,5 +1,5 @@
 import { sortObject, writeFile } from "@mb-cli/utils";
-import { merge } from "lodash";
+import { merge } from "lodash-es";
 
 export type ComuseType = boolean | string | number | undefined;
 

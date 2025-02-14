@@ -1,5 +1,7 @@
 import vue from "../template/vue/index";
 
+import { getProjectRootPath } from "@mb-cli/utils";
+import { globby } from "globby";
 import path from "path";
 
 import react from "../template/react/index";
@@ -13,11 +15,9 @@ import react from "../template/react/index";
  * @returns {Promise<string[]>} 返回一个Promise，解析为项目类型字符串数组
  */
 export const getProjectType = async (): Promise<string[]> => {
-  const globby = require("globby");
-  const pkgDir = require("pkg-dir");
-  const rootDir = await pkgDir(__dirname);
-  // 获取当前文件所在目录的路径
-  const dir = path.join(rootDir, "./template");
+  const rootDir = await getProjectRootPath();
+
+  const dir = path.join(rootDir, "/packages/project-template/template");
 
   // 使用globby模块异步获取指定目录下的所有子目录名称
   // 这里配置了只获取目录，并指定了当前工作目录为dir
@@ -37,11 +37,9 @@ export const getProjectType = async (): Promise<string[]> => {
  * @returns 返回一个 Promise，解析为模板名称的字符串数组。
  */
 export const getTemplateNames = async (type: string): Promise<string[]> => {
-  const globby = require("globby");
-  const pkgDir = require("pkg-dir");
-  const rootDir = await pkgDir(__dirname);
-  // 获取当前文件所在目录的路径
-  const dir = path.join(rootDir, "./template");
+  const rootDir = await getProjectRootPath();
+
+  const dir = path.join(rootDir, "/packages/project-template/template");
 
   // 使用 globby 库异步获取指定类型的所有子目录路径
   const paths = await globby([`${type}/*`], {
@@ -69,6 +67,7 @@ export const getTemplateNames = async (type: string): Promise<string[]> => {
 export const getTemplateMap = async (): Promise<Map<string, string[]>> => {
   // 获取项目类型列表
   const types = await getProjectType();
+
   // 初始化模板映射Map
   const templatesMap = new Map<string, string[]>();
   // 存储当前目录下的第一层文件夹名称及其二级目录

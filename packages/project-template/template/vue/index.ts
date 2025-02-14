@@ -1,4 +1,4 @@
-import { renderFile, getDirAllFiles } from "@mb-cli/utils";
+import { renderFile, getDirAllFiles, getProjectRootPath } from "@mb-cli/utils";
 import path from "path";
 
 import { GeneratorRenderTemplate } from "../../src/common/GeneratorRenderTemplate";
@@ -18,14 +18,12 @@ class GeneratorVue extends GeneratorRenderTemplate {
    * @returns Promise<void> 无返回值
    */
   setTemplate = async (api: any): Promise<void> => {
-    const pkgDir = require("pkg-dir");
-    const rootDir = await pkgDir(__dirname);
-    // 获取当前文件所在目录的路径
+    const rootDir = await getProjectRootPath();
+
     const dir = path.join(
       rootDir,
-      `./template/${api.baseOptions.templateType}/${api.templateName}`
+      `/packages/project-template/template/${api.baseOptions.templateType}/${api.templateName}`
     );
-
     // 获取模板目录下所有文件的路径
     const result = await getDirAllFiles(dir);
 
