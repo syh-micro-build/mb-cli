@@ -1,14 +1,7 @@
 {
-  "target": "es2015",
+  "extends": ["@mb-cli/typescript-config/tsconfig.json"],
   "compilerOptions": {
-    "strict": true,
-    "declaration": true,
-    "declarationMap": true,
-    "emitDeclarationOnly": true,
-    "outDir": "./dist",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true
+    "outDir": "./dist"
   },
   "include": ["template/react/*.ts", "template/react/vue/*.ts", "src/**.ts"],
   "exclude": [

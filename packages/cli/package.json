@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@mb-cli/project-template": "file:../project-template",
+    "@mb-cli/typescript-config": "file:../typescript-config",
     "@mb-cli/utils": "file:../utils",
     "commander": "^13.1.0",
     "fs-extra": "^11.3.0",
