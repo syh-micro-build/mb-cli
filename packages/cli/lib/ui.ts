@@ -1,8 +1,11 @@
+import { getProjectRootPath } from "@mb-cli/utils";
 import path from "path";
 import { createServer } from "vite";
 
 const startUi = async (): Promise<void> => {
-  const docs = path.resolve(__dirname, "../../../web/ui");
+  const rootDir = await getProjectRootPath();
+  const docs = path.join(rootDir, `/web/ui`);
+
   const server = await createServer({
     configFile: path.resolve(docs, "vite.config.ts"),
     server: {

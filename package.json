@@ -9,7 +9,6 @@
   "scripts": {
     "prepare": "husky",
     "lint": "eslint . --fix \"packages/**/*.{ts}\"",
-    "install": "pnpm i",
     "commitlint": "commitlint --edit",
     "build": "lerna run build"
   },
