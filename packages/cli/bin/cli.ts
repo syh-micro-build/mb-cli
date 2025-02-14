@@ -4,9 +4,10 @@ import { program } from "commander";
 import create from "../lib/create";
 import tel from "../lib/tel";
 import ui from "../lib/ui";
+import packageJson from "../package.json";
 
 program
-  .version(`@mb-cli/cli ${require("../package.json").version}`)
+  .version(`@mb-cli/cli ${packageJson.version}`)
   .usage("<command> [options]");
 
 program

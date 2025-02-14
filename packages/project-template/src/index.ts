@@ -1,11 +1,10 @@
-import type { GeneratorClass } from "@mb-cli/cli/lib/generator";
+import vue from "../template/vue/index";
 
+import { getProjectRootPath } from "@mb-cli/utils";
 import { globby } from "globby";
 import path from "path";
 
-export abstract class GeneratorRenderTemplate {
-  abstract onInit(api: GeneratorClass): Promise<void>;
-}
+import react from "../template/react/index";
 
 /**
  * 异步获取项目类型数组
@@ -16,12 +15,14 @@ export abstract class GeneratorRenderTemplate {
  * @returns {Promise<string[]>} 返回一个Promise，解析为项目类型字符串数组
  */
 export const getProjectType = async (): Promise<string[]> => {
-  // 获取当前文件所在目录的路径
-  const dir = path.join(__dirname, ".");
+  const rootDir = await getProjectRootPath();
+
+  const dir = path.join(rootDir, "/packages/project-template/template");
 
   // 使用globby模块异步获取指定目录下的所有子目录名称
   // 这里配置了只获取目录，并指定了当前工作目录为dir
   const types = await globby(["*"], { onlyDirectories: true, cwd: dir });
+
   return types;
 };
 
@@ -36,8 +37,9 @@ export const getProjectType = async (): Promise<string[]> => {
  * @returns 返回一个 Promise，解析为模板名称的字符串数组。
  */
 export const getTemplateNames = async (type: string): Promise<string[]> => {
-  // 获取当前目录的路径
-  const dir = path.join(__dirname, ".");
+  const rootDir = await getProjectRootPath();
+
+  const dir = path.join(rootDir, "/packages/project-template/template");
 
   // 使用 globby 库异步获取指定类型的所有子目录路径
   const paths = await globby([`${type}/*`], {
@@ -46,7 +48,7 @@ export const getTemplateNames = async (type: string): Promise<string[]> => {
   });
 
   // 将每个子目录路径转换为模板名称
-  const templateNames = paths.map(subFolderPath =>
+  const templateNames = paths.map((subFolderPath: string) =>
     path.basename(subFolderPath)
   );
 
@@ -65,6 +67,7 @@ export const getTemplateNames = async (type: string): Promise<string[]> => {
 export const getTemplateMap = async (): Promise<Map<string, string[]>> => {
   // 获取项目类型列表
   const types = await getProjectType();
+
   // 初始化模板映射Map
   const templatesMap = new Map<string, string[]>();
   // 存储当前目录下的第一层文件夹名称及其二级目录
@@ -88,10 +91,12 @@ export const getTemplateMap = async (): Promise<Map<string, string[]>> => {
  * @param api
  * @returns Promise<void>
  */
-export const onInit = async (api: GeneratorClass): Promise<void> => {
-  const file = path.join(__dirname, `./${api.baseOptions.templateType}/index`);
-
-  const { default: generator } = require(file);
-
-  await generator.onInit(api);
+export const onInit = async (api: any): Promise<void> => {
+  if (api.baseOptions.templateType === "vue") {
+    await vue.onInit(api);
+  } else if (api.baseOptions.templateType === "react") {
+    await react.onInit(api);
+  } else {
+    console.log("项目类型错误");
+  }
 };

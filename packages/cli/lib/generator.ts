@@ -1,5 +1,5 @@
-import { sortObject, writeFile } from "@mb-cli/utils/lib/index";
-import { merge } from "lodash";
+import { sortObject, writeFile } from "@mb-cli/utils";
+import { merge } from "lodash-es";
 
 export type ComuseType = boolean | string | number | undefined;
 
@@ -159,6 +159,8 @@ export class GeneratorClass {
         content: JSON.stringify(this.getPackageJson(), null, 2)
       }
     ];
+
+    console.log(this.templateAllPath.keys());
 
     for (const [index, filePath] of filePaths.entries()) {
       const content = this.templateAllPath.get(filePath);
