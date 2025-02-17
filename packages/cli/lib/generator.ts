@@ -160,8 +160,6 @@ export class GeneratorClass {
       }
     ];
 
-    console.log(this.templateAllPath.keys());
-
     for (const [index, filePath] of filePaths.entries()) {
       const content = this.templateAllPath.get(filePath);
       await writeFile(`${base}/${filePath}`, content);

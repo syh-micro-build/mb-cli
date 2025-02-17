@@ -16,20 +16,24 @@ import ora from "ora";
 import path from "path";
 import validateProjectName from "validate-npm-package-name";
 
-import { generator } from "./generator";
+import { generator, GeneratorClass } from "./generator";
 
-const bar1 = getCliProgress();
-/**
- * 创建模版
- * @param options
- */
-
-export const createTemplate = async (options: {
+interface createProjectInterface {
   name: string;
   projectType: string;
   templateName: string;
   baseUrl?: string;
-}): Promise<void> => {
+}
+
+const bar1 = getCliProgress();
+
+/**
+ * 初始化项目
+ * @param options
+ */
+export const initProject = async (
+  options: createProjectInterface
+): Promise<GeneratorClass> => {
   generator.baseOptions.projectName = options.name;
   generator.baseOptions.templateType = options.projectType;
   generator.templateName = options.templateName;
@@ -37,7 +41,18 @@ export const createTemplate = async (options: {
     generator.baseOptions.baseUrl = options.baseUrl;
   }
   await onInit(generator);
+  return generator;
+};
 
+/**
+ * 创建模版
+ * @param options
+ */
+
+export const createTemplate = async (
+  options: createProjectInterface
+): Promise<void> => {
+  await initProject(options);
   // 检查 node 版本
   const packageJson = generator.pkg;
   const requiredNodeVersion = packageJson.engines?.node;

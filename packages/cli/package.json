@@ -19,7 +19,13 @@
     "build": "rollup -c --bundleConfigAsCjs"
   },
   "bin": "tsx ./bin/cli.ts",
-  "main": "lib/cli.js",
+  "main": "./dist/create.js",
+  "types": "./dist/lib/create.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/create.js"
+    }
+  },
   "directories": {
     "lib": "lib",
     "test": "__tests__"
