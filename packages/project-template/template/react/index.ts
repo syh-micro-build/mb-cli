@@ -2,6 +2,7 @@ import { renderFile, getDirAllFiles, getProjectRootPath } from "@mb-cli/utils";
 import path from "path";
 
 import { GeneratorRenderTemplate } from "../../src/common/GeneratorRenderTemplate";
+import packageJson from "./packageJson";
 
 class GeneratorReact extends GeneratorRenderTemplate {
   /**
@@ -39,25 +40,7 @@ class GeneratorReact extends GeneratorRenderTemplate {
 
   onInit = async (api: any): Promise<void> => {
     await this.setTemplate(api);
-    api.pkg = {
-      dependencies: {
-        react: "^18.3.1",
-        "react-dom": "^18.3.1"
-      },
-      devDependencies: {
-        "@eslint/js": "^9.17.0",
-        "@types/react": "^18.3.18",
-        "@types/react-dom": "^18.3.5",
-        "@vitejs/plugin-react": "^4.3.4",
-        eslint: "^9.17.0",
-        "eslint-plugin-react-hooks": "^5.0.0",
-        "eslint-plugin-react-refresh": "^0.4.16",
-        globals: "^15.14.0",
-        typescript: "~5.6.2",
-        "typescript-eslint": "^8.18.2",
-        vite: "^6.0.5"
-      }
-    };
+    api.pkg = packageJson[api.templateName as keyof typeof packageJson];
   };
 }
 

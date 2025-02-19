@@ -18,7 +18,9 @@
     "serve": "tsx ./bin/cli.ts",
     "build": "rollup -c --bundleConfigAsCjs"
   },
-  "bin": "tsx ./bin/cli.ts",
+  "bin": {
+    "mb-cli": "./dist/index.js"
+  },
   "main": "./dist/create.js",
   "types": "./dist/lib/create.d.ts",
   "exports": {

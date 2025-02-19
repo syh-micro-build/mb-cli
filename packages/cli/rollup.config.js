@@ -12,7 +12,8 @@ export default defineConfig({
       dir: "dist",
       chunkFileNames: "dist/[name].mjs",
       format: "es",
-      sourcemap: true
+      sourcemap: true,
+      banner: "#!/usr/bin/env node"
     }
   ],
   plugins: [

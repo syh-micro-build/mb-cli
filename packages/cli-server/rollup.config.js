@@ -7,7 +7,8 @@ export default defineConfig({
     {
       file: "dist/index.mjs",
       format: "es",
-      sourcemap: true
+      sourcemap: true,
+      banner: "#!/usr/bin/env node"
     }
   ],
   external: ["fs", "path", "child_process", "util", "execa", "ora"],
