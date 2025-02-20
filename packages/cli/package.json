@@ -39,6 +39,7 @@
     "@mb-cli/project-template": "file:../project-template",
     "@mb-cli/typescript-config": "file:../typescript-config",
     "@mb-cli/utils": "file:../utils",
+    "chalk": "^5.4.1",
     "commander": "^13.1.0",
     "fs-extra": "^11.3.0",
     "inquirer": "^8.0.0",
