@@ -1,7 +1,7 @@
-export interface optionsInterface {
+export interface OptionsInterface {
   label: string;
   value: string;
-  children?: optionsInterface[];
+  children?: OptionsInterface[];
 }
 
 export interface createProjectInterface {
