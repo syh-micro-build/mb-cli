@@ -6,7 +6,7 @@ import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { fileURLToPath } from "url";
 
-import socketServers from "./controller/index";
+import socketServers from "./controller/socketController";
 import { routes } from "./router";
 
 const app = express();
