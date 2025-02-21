@@ -1,7 +1,7 @@
 import express from "express";
 
 import HttpResult from "../common/httpResult";
-import templateServers from "../servers/templateServer";
+import templateService from "../services/templateService";
 
 const router: express.Router = express.Router();
 
@@ -19,7 +19,7 @@ const router: express.Router = express.Router();
  */
 router.get("/getAll", async (req, res) => {
   try {
-    const result = await templateServers.getAll();
+    const result = await templateService.getAll();
     res.send(result);
   } catch (error) {
     console.log(error);
