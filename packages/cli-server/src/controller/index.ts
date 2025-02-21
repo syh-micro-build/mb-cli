@@ -47,7 +47,41 @@ const onInitProject = async (
 };
 
 export default (_io: Server, socket: Socket): void => {
-  // 初始化项目
+  /**
+   * @swagger
+   * /onInitProject:
+   *   post:
+   *     tags:
+   *       - websocket
+   *     summary: "socket.io 创建项目"
+   *     description: 返回项目类型+模版名称
+   *     content:
+   *       application/json:
+   *     requestBody:
+   *      required: true
+   *      content:
+   *        application/json:
+   *           schema:
+   *            type: object
+   *            required:
+   *              - projectType
+   *              - projectName
+   *              - templateName
+   *              - path
+   *            properties:
+   *              projectType:
+   *                type: string
+   *                default: 项目类型
+   *              projectName:
+   *                type: string
+   *                default: 项目名称
+   *              templateName:
+   *                type: string
+   *                default: 模版名称
+   *              path:
+   *                type: string
+   *                default: 路径
+   */
   socket.on(
     ON_EVENT_ENUM.ON_INIT_PROJECT_ENUM,
     (data: createProjectInterface) => onInitProject(data, socket)
