@@ -48,6 +48,14 @@ class ProjectService {
       total
     });
   }
+
+  async getHttpDependentDetails(data: {
+    text: string;
+  }): Promise<HttpResult<any>> {
+    const { text } = data;
+    const result = await axios.get(`https://registry.npmjs.org/${text}`);
+    return HttpResult.success(result.data);
+  }
 }
 
 export default new ProjectService();

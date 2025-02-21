@@ -46,7 +46,7 @@ router.get("/getDependentList", async (req, res) => {
  *     tags:
  *       - project
  *     summary: "获取依赖列表"
- *     description: 获取依赖列表
+ *     description: 获取依赖列表 参数内容参考 https://github.com/npm/registry/blob/main/docs/responses/package-metadata.md
  *     parameters:
  *       - in: query
  *         name: text
@@ -81,6 +81,39 @@ router.get("/searchHttpDependentList", async (req, res) => {
       page: page as number,
       text: text as string,
       pageSize: pageSize as number
+    });
+    res.send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(HttpResult.error("搜索依赖失败"));
+  }
+});
+
+/**
+ * @swagger
+ * /project/getHttpDependentDetails:
+ *   get:
+ *     tags:
+ *       - project
+ *     summary: "获取依赖详情"
+ *     description: 获取依赖详情 参数内容参考 https://github.com/npm/registry/blob/main/docs/responses/package-metadata.md
+ *     parameters:
+ *       - in: query
+ *         name: text
+ *         description: 名称
+ *         required: true
+ *         schema:
+ *           type: string
+ *           default: zyran-cli
+ *     responses:
+ *       200:
+ *         description: A list of users.
+ */
+router.get("/getHttpDependentDetails", async (req, res) => {
+  const { text = "" } = req.query;
+  try {
+    const result = await ProjectService.getHttpDependentDetails({
+      text: text as string
     });
     res.send(result);
   } catch (error) {
