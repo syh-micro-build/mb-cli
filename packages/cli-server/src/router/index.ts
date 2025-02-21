@@ -1,6 +1,7 @@
 import { Application } from "express";
 
 import fileFolderController from "../controller/fileFolderController";
+import projectController from "../controller/projectController";
 import templateController from "../controller/templateController";
 
 /**
@@ -10,6 +11,8 @@ import templateController from "../controller/templateController";
  *     description: 模版相关api
  *   - name: fileFolder
  *     description: 文件相关接口
+ *   - name: project
+ *     description: 项目相关接口
  *   - name: websocket
  *     description: socket.io 相关api (post 表示发送事件名称 get 表示监听事件名称)
  */
@@ -17,4 +20,5 @@ import templateController from "../controller/templateController";
 export const routes = (app: Application): void => {
   app.use("/template", templateController);
   app.use("/fileFolder", fileFolderController);
+  app.use("/project", projectController);
 };
