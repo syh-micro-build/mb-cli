@@ -1,3 +1,4 @@
+import axios from "axios";
 import fs from "fs";
 
 import HttpResult from "../common/httpResult";
@@ -30,6 +31,22 @@ class ProjectService {
       console.log(error);
       return HttpResult.success("获取文件失败");
     }
+  }
+
+  async searchHttpDependentList(data: {
+    page: number;
+    pageSize: number;
+    text: string;
+  }): Promise<HttpResult<any>> {
+    const { page, text, pageSize } = data;
+    const result = await axios.get(
+      `https://registry.npmjs.org/-/v1/search?text=${text}&size=${pageSize}&from=${page - 1}`
+    );
+    const { objects, total } = result.data;
+    return HttpResult.success({
+      list: objects,
+      total
+    });
   }
 }
 
