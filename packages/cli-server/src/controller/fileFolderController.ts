@@ -1,7 +1,7 @@
 import express from "express";
 
 import HttpResult from "../common/httpResult";
-import fileFolderServer from "../servers/fileFolderServer";
+import fileFolderService from "../services/fileFolderService";
 
 const router: express.Router = express.Router();
 
@@ -31,7 +31,7 @@ router.get("/getAllFile", async (req, res) => {
     res.status(500).send(HttpResult.error("获取文件失败"));
   }
   try {
-    const result = await fileFolderServer.getAllFile(path as string);
+    const result = await fileFolderService.getAllFile(path as string);
     res.send(result);
   } catch (error) {
     console.log(error);

@@ -2,7 +2,7 @@ import fs from "fs";
 
 import HttpResult from "../common/httpResult";
 
-class FileFolderServer {
+class FileFolderService {
   async getAllFile(path: string): Promise<HttpResult<any>> {
     try {
       const files = fs.readdirSync(path);
@@ -22,4 +22,4 @@ class FileFolderServer {
   }
 }
 
-export default new FileFolderServer();
+export default new FileFolderService();
