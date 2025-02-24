@@ -59,6 +59,11 @@ export interface BaseOptions {
    * 项目baseUrl
    */
   baseUrl: string;
+
+  /**
+   * 包管理器
+   */
+  packageManager: "npm" | "yarn" | "pnpm";
 }
 
 /**
@@ -68,6 +73,7 @@ export class GeneratorClass {
   baseOptions: BaseOptions = {
     projectName: defaultProjectName,
     templateType: defaultTemplateType,
+    packageManager: "yarn",
     baseUrl: process.cwd()
   };
 

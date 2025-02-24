@@ -92,32 +92,37 @@ export const createTemplate = async (
       spinner.text = "正在安装依赖，请稍候...";
       const base = `${generator.baseOptions.baseUrl}/${generator.baseOptions.projectName}`;
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      exec(`cd ${base} && npm install`, (error, _stdout, _stderr) => {
-        if (error) {
-          console.error(`执行 npm i 时出错: ${error.message}`);
-          spinner.stop();
-          console.log(`
+      exec(
+        `cd ${base} && ${generator.baseOptions.packageManager} install`,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        (error, _stdout, _stderr) => {
+          if (error) {
+            console.error(
+              `执行 ${generator.baseOptions.packageManager} i 时出错: ${error.message}`
+            );
+            spinner.stop();
+            console.log(`
             ✨ 项目创建成功！请手动安装依赖
               cd ${generator.baseOptions.projectName}
-              npm install
-              npm run dev
+              ${generator.baseOptions.packageManager} install
+              ${generator.baseOptions.packageManager} run dev
               `);
-          return;
-        }
-        // if (stderr) {
-        //   console.error(`stderr: ${stderr}`);
-        //   spinner.stop();
-        //   return;
-        // }
-        spinner.stop();
-        process.stdout.write("\r依赖安装完成。          \n");
-        console.log(`
+            return;
+          }
+          // if (stderr) {
+          //   console.error(`stderr: ${stderr}`);
+          //   spinner.stop();
+          //   return;
+          // }
+          spinner.stop();
+          process.stdout.write("\r依赖安装完成。          \n");
+          console.log(`
             ✨ 项目创建成功！
               cd ${generator.baseOptions.projectName}
-              npm run dev
+              ${generator.baseOptions.packageManager} run dev
               `);
-      });
+        }
+      );
     }
   });
 };
