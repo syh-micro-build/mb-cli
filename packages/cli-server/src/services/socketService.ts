@@ -1,8 +1,10 @@
 import { initProject } from "@mb-cli/cli";
 import { checkNodeVersion, checkNpmVersion } from "@mb-cli/utils";
+import { exec } from "child_process";
 import { Socket } from "socket.io";
 
 import HttpResult from "../common/httpResult";
+import { ON_EVENT_ENUM } from "../enum";
 import { createProjectInterface } from "../types";
 
 class TemplateService {
@@ -20,10 +22,12 @@ class TemplateService {
     const requiredNodeVersion = packageJson.engines?.node;
     const requiredNpmVersion = packageJson.engines?.npm;
 
+    generator.baseOptions.packageManager = data.packageManager;
+
     if (requiredNodeVersion) {
       const result = checkNodeVersion(requiredNodeVersion);
       if (!result) {
-        socket.send(HttpResult.error("node版本不匹配"));
+        socket.emit(ON_EVENT_ENUM.ON_ERROR, HttpResult.error("node版本不匹配"));
         return;
       }
     }
@@ -31,17 +35,28 @@ class TemplateService {
     if (requiredNpmVersion) {
       const result = checkNpmVersion(requiredNpmVersion);
       if (!result) {
-        socket.send(HttpResult.error("npm版本不匹配"));
+        socket.emit(ON_EVENT_ENUM.ON_ERROR, HttpResult.error("npm版本不匹配"));
         return;
       }
     }
     generator.render({
       onRenderProgress: (progress: number, t: number) => {
-        console.log("progress", progress, t);
+        socket.emit(ON_EVENT_ENUM.ON_PROGRESS, { progress, total: t });
       },
       onRenderEnd: () => {
-        console.log("onRenderEnd");
-        socket.send(HttpResult.success("项目创建成功"));
+        const base = `${generator.baseOptions.baseUrl}/${generator.baseOptions.projectName}`;
+        socket.emit(ON_EVENT_ENUM.ON_INSTALL, { type: "start" });
+        exec(
+          `cd ${base} && ${generator.baseOptions.packageManager} install`,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          (error, _stdout, _stderr) => {
+            if (error) {
+              socket.emit(ON_EVENT_ENUM.ON_INSTALL, { type: "error" });
+            } else {
+              socket.emit(ON_EVENT_ENUM.ON_INSTALL, { type: "success" });
+            }
+          }
+        );
       }
     });
   };

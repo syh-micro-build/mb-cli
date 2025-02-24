@@ -26,6 +26,7 @@ export default (_io: Server, socket: Socket): void => {
    *              - projectName
    *              - templateName
    *              - path
+   *              - packageManager
    *            properties:
    *              projectType:
    *                type: string
@@ -39,6 +40,9 @@ export default (_io: Server, socket: Socket): void => {
    *              path:
    *                type: string
    *                default: 路径
+   *              packageManager:
+   *                type: string
+   *                default: 包管理工具 npm | yarn | pnpm
    */
   socket.on(
     ON_EVENT_ENUM.ON_INIT_PROJECT_ENUM,

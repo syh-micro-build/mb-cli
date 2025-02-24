@@ -4,7 +4,10 @@ export const EMIT_ENUM = {
 
 export const ON_EVENT_ENUM = {
   ON_SUCCESS: "onSuccess",
-  ON_INIT_PROJECT_ENUM: "onInitProject"
+  ON_PROGRESS: "onProgress",
+  ON_ERROR: "onError",
+  ON_INIT_PROJECT_ENUM: "onInitProject",
+  ON_INSTALL: "onInstall"
 };
 
 export const HTTP_CODE = {

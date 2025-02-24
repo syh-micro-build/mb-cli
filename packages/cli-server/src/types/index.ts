@@ -9,4 +9,5 @@ export interface createProjectInterface {
   projectName: string;
   templateName: string;
   path: string;
+  packageManager: "npm" | "yarn" | "pnpm";
 }

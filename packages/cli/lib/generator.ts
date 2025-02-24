@@ -73,7 +73,7 @@ export class GeneratorClass {
   baseOptions: BaseOptions = {
     projectName: defaultProjectName,
     templateType: defaultTemplateType,
-    packageManager: "yarn",
+    packageManager: "npm",
     baseUrl: process.cwd()
   };
 
