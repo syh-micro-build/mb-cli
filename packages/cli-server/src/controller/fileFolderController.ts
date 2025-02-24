@@ -17,7 +17,7 @@ const router: express.Router = express.Router();
  *       - in: query
  *         name: path
  *         description: 文件夹路径
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
  *           default: /Users/wutan/Desktop/yd_project/mb-cli/packages/cli-server/src
@@ -26,7 +26,8 @@ const router: express.Router = express.Router();
  *         description: A list of users.
  */
 router.get("/getAllFile", async (req, res) => {
-  const { path } = req.query;
+  const { path = process.cwd() } = req.query;
+
   if (!path) {
     res.status(500).send(HttpResult.error("获取文件失败"));
   }

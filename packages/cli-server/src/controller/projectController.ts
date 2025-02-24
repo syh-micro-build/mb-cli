@@ -122,4 +122,103 @@ router.get("/getHttpDependentDetails", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /project/delProjectlDependent:
+ *   delete:
+ *     tags:
+ *       - project
+ *     summary: "删除项目依赖"
+ *     parameters:
+ *       - in: query
+ *         name: name
+ *         description: 名称
+ *         required: true
+ *         schema:
+ *           type: string
+ *           default: zyran-cli
+ *       - in: query
+ *         name: type
+ *         description: 类型
+ *         required: true
+ *         schema:
+ *           type: string
+ *           default: dependencies
+ *       - in: query
+ *         name: path
+ *         description: 路径
+ *         required: true
+ *         schema:
+ *           type: string
+ *           default: /Users/wutan/Desktop/yd_project/mb-cli/packages/cli-server
+ *     responses:
+ *       200:
+ *         description: A list of users.
+ */
+router.delete("/delProjectlDependent", async (req, res) => {
+  const { name = "", type = "", path = "" } = req.query;
+  try {
+    const result = await ProjectService.delProjectlDependent({
+      name: name as string,
+      type: type as string,
+      path: path as string
+    });
+    res.send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(HttpResult.error("删除依赖失败"));
+  }
+});
+
+/**
+ * @swagger
+ * /project/updateProjectlDependent:
+ *   put:
+ *     tags:
+ *       - project
+ *     summary: "更新项目依赖"
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *            type: object
+ *            required:
+ *              - name
+ *              - type
+ *              - version
+ *              - path
+ *            properties:
+ *              name:
+ *                type: string
+ *                default: axios
+ *              type:
+ *                type: string
+ *                default: dependencies
+ *              version:
+ *                type: string
+ *                default: 依赖版本
+ *              path:
+ *                type: string
+ *                default: /Users/wutan/Desktop/yd_project/mb-cli/packages/cli-server
+ *     responses:
+ *       200:
+ *         description: A list of users.
+ */
+router.put("/updateProjectlDependent", async (req, res) => {
+  const { name = "", type = "", path = "", version = "" } = req.body;
+  try {
+    const result = await ProjectService.updateProjectlDependent({
+      name: name as string,
+      type: type as string,
+      path: path as string,
+      version: version as string
+    });
+    res.send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(HttpResult.error("更新依赖失败"));
+  }
+});
+
 export default router;

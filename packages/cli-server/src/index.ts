@@ -46,9 +46,9 @@ export const startServer = async (data?: {
 }): Promise<void> => {
   const swaggerDocs = swaggerJsdoc(swaggerOptions);
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-  routes(app);
-  app.use(express.json());
 
+  app.use(express.json());
+  routes(app);
   const httpServer = createServer(app);
 
   // 创建Socket.IO服务器实例，传入HTTP服务器实例和配置选项
