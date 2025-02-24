@@ -1,5 +1,5 @@
 {
-  "name": "@mb-cli/server",
+  "name": "@mb-cli/cli-server",
   "version": "0.0.0",
   "description": "> TODO: description",
   "homepage": "https://github.com/syh-micro-build/mb-cli#readme",
@@ -21,7 +21,13 @@
   "files": [
     "lib"
   ],
-  "main": "lib/cli-server.js",
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs"
+    }
+  },
   "directories": {
     "lib": "lib",
     "test": "__tests__"
