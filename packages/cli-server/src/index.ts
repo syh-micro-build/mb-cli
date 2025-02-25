@@ -1,3 +1,4 @@
+import cros from "cors";
 import express from "express";
 import { createServer } from "http";
 import path, { dirname } from "path";
@@ -46,7 +47,7 @@ export const startServer = async (data?: {
 }): Promise<void> => {
   const swaggerDocs = swaggerJsdoc(swaggerOptions);
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
+  app.use(cros());
   app.use(express.json());
   routes(app);
   const httpServer = createServer(app);
