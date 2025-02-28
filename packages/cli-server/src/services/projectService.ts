@@ -4,6 +4,7 @@ import { exec } from "child_process";
 import fs from "fs";
 
 import HttpResult from "../common/httpResult";
+import { scriptDescription } from "../common/static";
 
 class ProjectService {
   getProjectPackageJson(path: string): any {
@@ -21,6 +22,27 @@ class ProjectService {
     } catch {
       // 如果发生错误，返回错误信息
       throw HttpResult.error("读取文件内容失败");
+    }
+  }
+
+  async getProjectScript(path: string): Promise<HttpResult<any>> {
+    try {
+      const jsonData = this.getProjectPackageJson(path);
+      const { scripts } = jsonData;
+      const result = Object.keys(scripts)
+        .filter(item => Object.keys(scriptDescription).includes(item))
+        .map((item: any) => {
+          const data =
+            scriptDescription[item as keyof typeof scriptDescription];
+          return {
+            version: scripts[item],
+            ...data
+          };
+        });
+      return HttpResult.success(result);
+    } catch (error) {
+      console.log(error);
+      return HttpResult.success("获取文件失败");
     }
   }
 

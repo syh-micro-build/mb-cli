@@ -272,4 +272,38 @@ router.put("/updateProjectlDependent", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /project/getProjectScript:
+ *   get:
+ *     tags:
+ *       - project
+ *     summary: "获取项目可执行脚本"
+ *     description: 获取项目可执行脚本
+ *     parameters:
+ *       - in: query
+ *         name: path
+ *         description: 文件夹路径
+ *         required: true
+ *         schema:
+ *           type: string
+ *           default: /Users/wutan/Desktop/yd_project/mb-cli
+ *     responses:
+ *       200:
+ *         description: A list of users.
+ */
+router.get("/getProjectScript", async (req, res) => {
+  const { path } = req.query;
+  if (!path) {
+    res.status(500).send(HttpResult.error("获取配置文件失败"));
+  }
+  try {
+    const result = await ProjectService.getProjectScript(path as string);
+    res.send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(HttpResult.error("获取项目配置失败"));
+  }
+});
+
 export default router;
