@@ -172,6 +172,57 @@ router.delete("/delProjectlDependent", async (req, res) => {
 
 /**
  * @swagger
+ * /project/addProjectlDependent:
+ *   post:
+ *     tags:
+ *       - project
+ *     summary: "添加项目依赖"
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *            type: object
+ *            required:
+ *              - name
+ *              - type
+ *              - version
+ *              - path
+ *            properties:
+ *              name:
+ *                type: string
+ *                default: axios
+ *              type:
+ *                type: string
+ *                default: dependencies
+ *              version:
+ *                type: string
+ *                default: 依赖版本
+ *              path:
+ *                type: string
+ *                default: /Users/wutan/Desktop/yd_project/mb-cli/packages/cli-server
+ *     responses:
+ *       200:
+ *         description: A list of users.
+ */
+router.post("/addProjectlDependent", async (req, res) => {
+  const { name = "", type = "", path = "", version = "" } = req.body;
+  try {
+    const result = await ProjectService.updateProjectlDependent({
+      name: name as string,
+      type: type as string,
+      path: path as string,
+      version: version as string
+    });
+    res.send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(HttpResult.error("添加依赖失败"));
+  }
+});
+
+/**
+ * @swagger
  * /project/updateProjectlDependent:
  *   put:
  *     tags:

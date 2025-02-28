@@ -242,3 +242,24 @@ export const terminatePort = (port: number): Promise<boolean> =>
       resolve(true);
     });
   });
+
+/**
+ * 判断项目使用的包管理工具
+ * @param {string} projectPath - 项目根目录的路径
+ * @returns {string} - 返回使用的包管理工具名称
+ */
+export const getPackageManager = (projectPath: string): string | undefined => {
+  const packageLock = path.join(projectPath, "package-lock.json");
+  const yarnLock = path.join(projectPath, "yarn.lock");
+  const pnpmLock = path.join(projectPath, "pnpm-lock.yaml");
+  if (fs.existsSync(packageLock)) {
+    return "npm";
+  }
+  if (fs.existsSync(yarnLock)) {
+    return "yarn";
+  }
+  if (fs.existsSync(pnpmLock)) {
+    return "pnpm";
+  }
+  return undefined;
+};

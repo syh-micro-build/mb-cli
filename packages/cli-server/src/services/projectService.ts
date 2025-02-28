@@ -1,5 +1,6 @@
-import { writeFile } from "@mb-cli/utils";
+import { writeFile, getPackageManager } from "@mb-cli/utils";
 import axios from "axios";
+import { exec } from "child_process";
 import fs from "fs";
 
 import HttpResult from "../common/httpResult";
@@ -68,24 +69,51 @@ class ProjectService {
     return HttpResult.success(result.data);
   }
 
+  async addProjectlDependent(data: {
+    name: string;
+    type: string;
+    path: string;
+    version: string;
+  }): Promise<HttpResult<boolean | string>> {
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise(async resolve => {
+      const { name, type, path, version } = data;
+      const newPath = path + "/package.json";
+      const jsonData = this.getProjectPackageJson(path);
+      const dependencies = jsonData[type];
+      dependencies[name] = version;
+      const packageManager = this.getProjectPackageManager(path);
+      await writeFile(newPath, JSON.stringify(jsonData, null, 2));
+      exec(`cd ${path} && ${packageManager} install`, error => {
+        if (error) {
+          resolve(HttpResult.error(false));
+        } else {
+          resolve(HttpResult.success(true));
+        }
+      });
+    });
+  }
+
   async delProjectlDependent(data: {
     name: string;
     type: string;
     path: string;
   }): Promise<HttpResult<boolean | string>> {
-    const { name, type, path } = data;
-    try {
-      const newPath = path + "/package.json";
-      const jsonData = this.getProjectPackageJson(path);
-      const dependencies = jsonData[type];
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-      delete dependencies[name];
-      await writeFile(newPath, JSON.stringify(jsonData, null, 2));
-      return HttpResult.success(true);
-    } catch (error) {
-      console.log(error);
-      return HttpResult.success("获取文件失败");
-    }
+    const { name, path } = data;
+    return new Promise(resolve => {
+      const packageManager = this.getProjectPackageManager(path);
+      exec(
+        `cd ${path} && ${packageManager} uninstall ${name}`,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        (error, _stdout, _stderr) => {
+          if (error) {
+            resolve(HttpResult.error("删除依赖失败"));
+          } else {
+            resolve(HttpResult.success(true));
+          }
+        }
+      );
+    });
   }
 
   async updateProjectlDependent(data: {
@@ -94,18 +122,34 @@ class ProjectService {
     path: string;
     version: string;
   }): Promise<HttpResult<boolean | string>> {
-    try {
+    return new Promise(resolve => {
       const { name, type, path, version } = data;
-      const newPath = path + "/package.json";
-      const jsonData = this.getProjectPackageJson(path);
-      const dependencies = jsonData[type];
-      dependencies[name] = version;
-      await writeFile(newPath, JSON.stringify(jsonData, null, 2));
-      return HttpResult.success(true);
-    } catch (error) {
-      console.log(error);
-      return HttpResult.success("更新依赖失败");
+      const _type = type === "dependencies" ? "" : "--save";
+      const packageManager = this.getProjectPackageManager(path);
+      console.log(
+        `cd ${path} && ${packageManager} install ${name}@${version} ${_type}`
+      );
+
+      exec(
+        `cd ${path} && ${packageManager} install ${name}@${version} ${_type}`,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        (error, _stdout, _stderr) => {
+          if (error) {
+            resolve(HttpResult.error(false));
+          } else {
+            resolve(HttpResult.success(true));
+          }
+        }
+      );
+    });
+  }
+
+  getProjectPackageManager(path: string): string {
+    const result = getPackageManager(path);
+    if (typeof result === "string") {
+      return result;
     }
+    throw new Error("检测包管理工具失败 error");
   }
 }
 
