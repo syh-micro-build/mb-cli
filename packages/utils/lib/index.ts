@@ -224,8 +224,8 @@ export const getProjectRootPath = async (): Promise<string> => {
  * @param port - 要终止的端口号
  * @returns Promise<boolean> - 返回一个 Promise，表示操作是否成功
  */
-export const terminatePort = (port: number): Promise<boolean> =>
-  new Promise(resolve => {
+export const terminatePort = (port: number): Promise<boolean | string> =>
+  new Promise((resolve, reject) => {
     const platform = os.platform();
     let killCommand: string;
     if (platform === "win32") {
@@ -236,7 +236,8 @@ export const terminatePort = (port: number): Promise<boolean> =>
     exec(killCommand, (killErr, killStdout, killStderr) => {
       if (killErr) {
         console.error(`终止端口 ${port} 上的进程时出错: ${killStderr}`);
-        throw killStderr;
+        // eslint-disable-next-line prefer-promise-reject-errors
+        reject(`终止端口 ${port} 上的进程时出错: ${killStderr}`);
       }
       console.log(`成功终止端口 ${port} 上的进程。`);
       resolve(true);

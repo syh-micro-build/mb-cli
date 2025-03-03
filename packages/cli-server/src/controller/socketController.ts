@@ -48,4 +48,31 @@ export default (_io: Server, socket: Socket): void => {
     ON_EVENT_ENUM.ON_INIT_PROJECT_ENUM,
     (data: createProjectInterface) => SocketService.onInitProject(data, socket)
   );
+
+  /**
+   * @swagger
+   * /onExecuteShell:
+   *   post:
+   *     tags:
+   *       - websocket
+   *     summary: "socket.io 执行shell 脚本"
+   *     description: 监听shell 脚本
+   *     content:
+   *       application/json:
+   *     requestBody:
+   *      required: true
+   *      content:
+   *        application/json:
+   *           schema:
+   *            type: object
+   *            required:
+   *              - path
+   *            properties:
+   *              path:
+   *                type: string
+   *                default: 所执行的shell 脚本
+   */
+  socket.on(ON_EVENT_ENUM.ON_EXECUTE_SHELL, (data: { path: string }) =>
+    SocketService.executeShell(data.path, socket)
+  );
 };

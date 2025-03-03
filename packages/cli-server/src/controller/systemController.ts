@@ -28,7 +28,7 @@ router.delete("/delPort", async (req, res) => {
   const { port } = req.query as unknown as { port: number };
   try {
     const result = await systemService.stopPort(port);
-    res.send(result);
+    res.status(200).send(result);
   } catch (error) {
     console.log(error);
     res.status(500).send(HttpResult.error("终止端口失败"));
