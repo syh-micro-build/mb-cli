@@ -92,9 +92,10 @@ export const getTemplateMap = async (): Promise<Map<string, string[]>> => {
  * @returns Promise<void>
  */
 export const onInit = async (api: any): Promise<void> => {
-  if (api.baseOptions.templateType === "vue") {
+  const baseOptions = api.getBaseOptions();
+  if (baseOptions.templateType === "vue") {
     await vue.onInit(api);
-  } else if (api.baseOptions.templateType === "react") {
+  } else if (baseOptions.templateType === "react") {
     await react.onInit(api);
   } else {
     console.log("项目类型错误");

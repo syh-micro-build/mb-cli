@@ -13,11 +13,14 @@ class GeneratorReact extends GeneratorRenderTemplate {
    * @returns Promise<void> 无返回值
    */
   setTemplate = async (api: any): Promise<void> => {
+    const baseOptions = api.getBaseOptions();
+    const templateName = api.getTemplateName();
+    const templateAllPath = api.getTemplateAllPath();
     const rootDir = await getProjectRootPath();
 
     const dir = path.join(
       rootDir,
-      `/packages/project-template/template/${api.baseOptions.templateType}/${api.templateName}`
+      `/packages/project-template/template/${baseOptions.templateType}/${templateName}`
     );
 
     // 获取模板目录下所有文件的路径
@@ -28,19 +31,22 @@ class GeneratorReact extends GeneratorRenderTemplate {
       // 构建文件的绝对路径
       const filePath = path.resolve(dir, _path);
       // 将文件路径和渲染后的文件内容添加到模板路径集合中
-      api.templateAllPath.set(
+      templateAllPath.set(
         _path,
         renderFile(filePath, {
-          projectType: api.baseOptions.templateType,
-          projectName: api.baseOptions.projectName
+          projectType: baseOptions.templateType,
+          projectName: baseOptions.projectName
         })
       );
     }
+
+    api.setTemplateAllPath(templateAllPath);
   };
 
   onInit = async (api: any): Promise<void> => {
     await this.setTemplate(api);
-    api.pkg = packageJson[api.templateName as keyof typeof packageJson];
+    const pkg = packageJson[api.templateName as keyof typeof packageJson];
+    api.setPackageJson(pkg);
   };
 }
 

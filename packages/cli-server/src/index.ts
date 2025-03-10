@@ -71,5 +71,3 @@ export const startServer = async (data?: {
     console.log("Server is running on host: http://127.0.0.1:3000");
   });
 };
-
-startServer();

@@ -18,11 +18,12 @@ class TemplateService {
       templateName: data.templateName,
       baseUrl: data.path
     });
-    const packageJson = generator.pkg;
+    const baseOptions = generator.getBaseOptions();
+    const packageJson = generator.getPackageJson();
     const requiredNodeVersion = packageJson.engines?.node;
     const requiredNpmVersion = packageJson.engines?.npm;
 
-    generator.baseOptions.packageManager = data.packageManager;
+    baseOptions.packageManager = data.packageManager;
 
     if (requiredNodeVersion) {
       const result = checkNodeVersion(requiredNodeVersion);
@@ -39,15 +40,16 @@ class TemplateService {
         return;
       }
     }
+    generator.setBaseOptions(baseOptions);
     generator.render({
       onRenderProgress: (progress: number, t: number) => {
         socket.emit(EMIT_ENUM.ON_PROGRESS, { progress, total: t });
       },
       onRenderEnd: () => {
-        const base = `${generator.baseOptions.baseUrl}/${generator.baseOptions.projectName}`;
+        const base = `${baseOptions.baseUrl}/${baseOptions.projectName}`;
         socket.emit(EMIT_ENUM.ON_INSTALL, { type: "start" });
         exec(
-          `cd ${base} && ${generator.baseOptions.packageManager} install`,
+          `cd ${base} && ${baseOptions.packageManager} install`,
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           (error, _stdout, _stderr) => {
             if (error) {
