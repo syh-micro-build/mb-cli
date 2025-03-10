@@ -70,7 +70,7 @@ export interface BaseOptions {
  * 生成器类
  */
 export class GeneratorClass {
-  baseOptions: BaseOptions = {
+  private baseOptions: BaseOptions = {
     projectName: defaultProjectName,
     templateType: defaultTemplateType,
     packageManager: "npm",
@@ -80,12 +80,12 @@ export class GeneratorClass {
   /**
    * @param templateName 模板名称
    */
-  templateName: string = "";
+  private templateName: string = "";
 
   /**
    * @param templateAllPath 模板路径
    */
-  templateAllPath: Map<string, string | Buffer> = new Map<
+  private templateAllPath: Map<string, string | Buffer> = new Map<
     string,
     string | Buffer
   >();
@@ -93,13 +93,47 @@ export class GeneratorClass {
   /**
    * @param pkg package.json
    */
-  pkg: PackageType = {};
+  private pkg: PackageType = {};
+
+  /**
+   * 设置基本配置
+   * @param baseOptions 基本配置
+   */
+  setBaseOptions = (baseOptions: BaseOptions): void => {
+    this.baseOptions = baseOptions;
+  };
+
+  /**
+   * 设置模板路径
+   * @param templateAllPath 模板路径
+   */
+  setTemplateAllPath = (
+    templateAllPath: Map<string, string | Buffer>
+  ): void => {
+    this.templateAllPath = templateAllPath;
+  };
+
+  /**
+   * 设置模板名称
+   * @param templateName 模板名称
+   */
+  setTemplateName(templateName: string): void {
+    this.templateName = templateName;
+  }
+
+  /**
+   * 设置package.json
+   * @param pkg package.json
+   */
+  setPackageJson: (pkg: PackageType) => void = (pkg: PackageType) => {
+    this.pkg = pkg;
+  };
 
   /**
    * 获取package.json
    * @returns package.json
    */
-  private getPackageJson(): PackageType {
+  getPackageJson(): PackageType {
     return sortObject(
       merge(
         {
@@ -143,6 +177,30 @@ export class GeneratorClass {
         "jest"
       ]
     );
+  }
+
+  /**
+   * 获取模板名称
+   * @returns 模板名称
+   */
+  getTemplateName(): string {
+    return this.templateName;
+  }
+
+  /**
+   * 获取模板路径
+   * @returns 模板路径
+   */
+  getTemplateAllPath(): Map<string, string | Buffer> {
+    return this.templateAllPath;
+  }
+
+  /**
+   * 获取基本配置
+   * @returns 基本配置
+   */
+  getBaseOptions(): BaseOptions {
+    return this.baseOptions;
   }
 
   /**
