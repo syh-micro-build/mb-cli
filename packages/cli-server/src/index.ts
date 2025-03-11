@@ -7,6 +7,7 @@ import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { fileURLToPath } from "url";
 
+import { getEnv } from "./common/envConfig";
 import socketServers from "./controller/socketController";
 import { routes } from "./router";
 
@@ -15,6 +16,7 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 // 获取当前模块的目录路径
 const __dirname = dirname(__filename);
+
 // Swagger配置
 const swaggerOptions = {
   definition: {
@@ -27,8 +29,14 @@ const swaggerOptions = {
   },
   // 这里是扫描你的TypeScript文件的路径，使用 `**/*.ts` 以确保 TypeScript 文件被正确扫描
   apis: [
-    path.join(__dirname, "./router/*.ts"),
-    path.join(__dirname, "./controller/*.ts")
+    path.join(
+      __dirname,
+      `${getEnv().ENV_MODE === "production" ? "../src/" : "./"}router/*.ts`
+    ),
+    path.join(
+      __dirname,
+      `${getEnv().ENV_MODE === "production" ? "../src/" : "./"}controller/*.ts`
+    )
   ]
 };
 
@@ -42,6 +50,8 @@ const swaggerOptions = {
  * @param data.successCallback - 服务器成功启动时调用的回调函数
  * @returns 无返回值
  */
+
+// 原有的代码保持不变
 export const startServer = async (data?: {
   successCallback?: () => void;
 }): Promise<void> => {
@@ -63,11 +73,12 @@ export const startServer = async (data?: {
     socketServers(io, socket);
   });
 
-  // 监听HTTP服务器的3000端口，并在成功启动时调用提供的成功回调函数（如果有）
-  httpServer.listen(3000, (): void => {
+  // 使用环境变量中的端口号
+  const port = process.env.PORT || 3000;
+  httpServer.listen(port, (): void => {
     if (data?.successCallback) {
       data.successCallback();
     }
-    console.log("Server is running on host: http://127.0.0.1:3000");
+    console.log(`Server is running on host: http://127.0.0.1:${port}`);
   });
 };

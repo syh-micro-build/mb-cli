@@ -1,3 +1,4 @@
+import replace from "@rollup/plugin-replace";
 import typescript from "@rollup/plugin-typescript";
 import { defineConfig } from "rollup";
 
@@ -13,6 +14,11 @@ export default defineConfig({
   ],
   external: ["fs", "path", "child_process", "util", "execa", "ora"],
   plugins: [
+    replace({
+      "process.env.NODE_ENV": JSON.stringify(
+        process.env.NODE_ENV || "development"
+      )
+    }),
     typescript({
       tsconfig: "./tsconfig.json"
     })

@@ -1,4 +1,5 @@
 {
+  "target": "es2015",
   "extends": ["@mb-cli/typescript-config/tsconfig.json"],
   "compilerOptions": {
     "outDir": "./dist"

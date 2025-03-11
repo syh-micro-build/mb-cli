@@ -15,8 +15,8 @@
   "type": "module",
   "scripts": {
     "test": "node ./__tests__/cli-server.test.js",
-    "dev": "npx tsx watch ./src/index.ts",
-    "build": "rollup -c --bundleConfigAsCjs"
+    "dev": "NODE_ENV=development npx tsx watch ./src/index.ts",
+    "build": "NODE_ENV=production rollup -c --bundleConfigAsCjs"
   },
   "files": [
     "lib"
@@ -43,12 +43,14 @@
     "@types/cors": "^2.8.17",
     "axios": "^1.7.9",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "socket.io": "^4.8.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
+    "@rollup/plugin-replace": "^6.0.2",
     "@types/express": "^5.0.0",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.7"
