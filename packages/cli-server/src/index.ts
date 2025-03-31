@@ -79,6 +79,8 @@ export const startServer = async (data?: {
     if (data?.successCallback) {
       data.successCallback();
     }
-    console.log(`Server is running on host: http://127.0.0.1:${port}`);
+    console.log(
+      `Server is running on host: http://127.0.0.1:${port}/api-docs/`
+    );
   });
 };
