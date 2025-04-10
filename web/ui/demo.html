@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var person = {
+        name: "张三"
+      };
+
+      var proxy = new Proxy(person, {
+        get: function (target, propKey) {
+          console.log(target, propKey);
+          if (propKey in target) {
+            return target[propKey];
+          } else {
+            throw new ReferenceError(
+              'Prop name "' + propKey + '" does not exist.'
+            );
+          }
+        }
+      });
+
+      console.log(proxy.name); // "张三"
+
+      class MyClass {
+        constructor() {
+          // ...
+        }
+        get prop() {
+          console.log("val", inst);
+          return "123123123";
+        }
+        // set prop(value) {
+        //   console.log("setter: " + value);
+        // }
+      }
+
+      let inst = new MyClass();
+
+      inst.prop = 123;
+
+      // setter: 123
+
+      //   inst.prop;
+      console.log(inst.prop);
+
+      const str = "kkkabcaaaaaabbccc1231";
+      const map = new Map();
+      for (let i = 0; i < str.length; i++) {
+        const char = str[i];
+        if (map.has(char)) {
+          map.set(char, map.get(char) + 1);
+        } else {
+          map.set(char, 1);
+        }
+      }
+      let max = 0;
+      let maxChar = "";
+      for (let [key, value] of map.entries()) {
+        console.log(key, value);
+        // 找出最大值
+        if (value > max) {
+          max = value;
+          maxChar = key;
+        }
+      }
+      console.log(max, maxChar);
+
+      const urls = [
+        "https://jsonplaceholder.typicode.com/todos/1",
+        "https://jsonplaceholder.typicode.com/todos/2",
+        "https://jsonplaceholder.typicode.com/todos/3",
+        "https://jsonplaceholder.typicode.com/todos/4",
+        "https://jsonplaceholder.typicode.com/todos/5"
+      ];
+
+      function requestController(urls, maxNum) {
+        if (urls.length === 0) {
+          return Promise.resolve([]);
+        }
+        return new Promise((resolve, reject) => {
+          let nextIndex = 0;
+          let result = [];
+          let finishCount = 0;
+          async function _request() {
+            if (nextIndex >= urls.length) {
+              return;
+            }
+            const i = nextIndex;
+            const url = urls[nextIndex++];
+            const resp = await fetch(url);
+            result[i] = resp;
+            finishCount++;
+            if (finishCount === urls.length) {
+              resolve(result);
+            }
+            _request(); // 递归调用 下一个请求补位
+          }
+          for (let i = 0; i < Math.min(maxNum, urls.length); i++) {
+            _request();
+          }
+        });
+      }
+
+      requestController(urls, 2).then(res => {
+        console.log("res", res);
+      });
+    </script>
+  </body>
+</html>
