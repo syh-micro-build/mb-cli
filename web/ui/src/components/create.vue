@@ -6,21 +6,20 @@
         type="success"
         class="create-button"
         @click="handleCreate"
-      >在此创建新项目</el-button>
+        >在此创建新项目</el-button
+      >
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { Plus } from "@element-plus/icons-vue";
-import { useRouter } from 'vue-router';
-
-
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 
 const handleCreate = () => {
-  router.push('/project/create');
+  router.push("/project/create");
 };
 </script>
 

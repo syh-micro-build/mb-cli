@@ -1,0 +1,9 @@
+{
+  "target": "es2015",
+  "extends": ["@mb-cli/typescript-config/tsconfig.json"],
+  "compilerOptions": {
+    "outDir": "./dist"
+  },
+  "include": ["src/*.ts"],
+  "exclude": ["dist", "node_modules"]
+}

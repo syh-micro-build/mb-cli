@@ -9,13 +9,13 @@
   "scripts": {
     "prepare": "husky",
     "lint": "eslint . --fix \"packages/**/*.{ts}\"",
-    "install": "pnpm i",
     "commitlint": "commitlint --edit",
     "build": "lerna run build"
   },
   "dependencies": {
     "@rollup/plugin-typescript": "^12.1.2",
     "commitizen": "^4.3.1",
+    "lerna": "^8.1.9",
     "lint-staged": "^15.4.1",
     "tsx": "^4.19.2",
     "vite": "^6.1.0"
@@ -30,7 +30,6 @@
     "cz-git": "^1.11.0",
     "eslint": "^9.18.0",
     "husky": "^9.1.7",
-    "lerna": "^6.6.2",
     "mb-eslint-config": "^1.1.4",
     "mb-prettier-config": "^1.0.3",
     "prettier": "^3.4.2",
@@ -48,7 +47,7 @@
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown",
     "**/*.{js,ts,tsx,mjs,cjs,vue}": [
-      "eslint --fix"
+      "eslint --fix --no-warn-ignored"
     ]
   },
   "config": {

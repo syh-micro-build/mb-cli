@@ -44,34 +44,45 @@
           </div>
         </div>
         <div>
-          <el-space  :size="20">
+          <el-space :size="20">
             <el-tooltip
-            class="box-item"
-            effect="dark"
-            content="这个插件带有一个生成器，可以在项目中新增或者修改文件"
-            placement="top"
-          >
-            <el-icon><Document /></el-icon>
-          </el-tooltip>
-          <el-tooltip
-            class="box-item"
-            effect="dark"
-            content="这个插件包含额外的UI功能，比如加强的任务页面、配置页面..."
-            placement="top"
-          >
-            <el-icon><EditPen /></el-icon>
-          </el-tooltip>
+              class="box-item"
+              effect="dark"
+              content="这个插件带有一个生成器，可以在项目中新增或者修改文件"
+              placement="top"
+            >
+              <el-icon><Document /></el-icon>
+            </el-tooltip>
+            <el-tooltip
+              class="box-item"
+              effect="dark"
+              content="这个插件包含额外的UI功能，比如加强的任务页面、配置页面..."
+              placement="top"
+            >
+              <el-icon><EditPen /></el-icon>
+            </el-tooltip>
           </el-space>
-          
         </div>
       </div>
     </div>
 
-
-    <div class="footer"> 
-      <el-button type="primary" :icon="Folder">浏览本地插件</el-button>
-      <el-button type="primary" :icon="Close" @click="handleClose">取消</el-button>
-      <el-button type="primary" :icon="Download">安装</el-button>
+    <div class="footer">
+      <el-button
+        type="primary"
+        :icon="Folder"
+        >浏览本地插件</el-button
+      >
+      <el-button
+        type="primary"
+        :icon="Close"
+        @click="handleClose"
+        >取消</el-button
+      >
+      <el-button
+        type="primary"
+        :icon="Download"
+        >安装</el-button
+      >
     </div>
   </div>
 </template>
@@ -111,7 +122,7 @@ const installedPlugins = ref([
 ]);
 const handleClose = () => {
   emit("close");
-}
+};
 </script>
 <style scoped lang="scss">
 .plugin-details {

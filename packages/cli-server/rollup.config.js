@@ -1,0 +1,26 @@
+import replace from "@rollup/plugin-replace";
+import typescript from "@rollup/plugin-typescript";
+import { defineConfig } from "rollup";
+
+export default defineConfig({
+  input: "./src/index.ts",
+  output: [
+    {
+      file: "dist/index.mjs",
+      format: "es",
+      sourcemap: true,
+      banner: "#!/usr/bin/env node"
+    }
+  ],
+  external: ["fs", "path", "child_process", "util", "execa", "ora"],
+  plugins: [
+    replace({
+      "process.env.NODE_ENV": JSON.stringify(
+        process.env.NODE_ENV || "development"
+      )
+    }),
+    typescript({
+      tsconfig: "./tsconfig.json"
+    })
+  ]
+});

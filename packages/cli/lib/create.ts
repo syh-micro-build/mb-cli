@@ -16,30 +16,47 @@ import ora from "ora";
 import path from "path";
 import validateProjectName from "validate-npm-package-name";
 
-import { generator } from "./generator";
+import { generator, GeneratorClass } from "./generator";
+
+interface createProjectInterface {
+  name: string;
+  projectType: string;
+  templateName: string;
+  baseUrl?: string;
+}
 
 const bar1 = getCliProgress();
+
+/**
+ * 初始化项目
+ * @param options
+ */
+export const initProject = async (
+  options: createProjectInterface
+): Promise<GeneratorClass> => {
+  const baseOptions = generator.getBaseOptions();
+  baseOptions.projectName = options.name;
+  baseOptions.templateType = options.projectType;
+  generator.setTemplateName(options.templateName);
+  if (options.baseUrl) {
+    baseOptions.baseUrl = options.baseUrl;
+  }
+  generator.setBaseOptions(baseOptions);
+  await onInit(generator);
+  return generator;
+};
+
 /**
  * 创建模版
  * @param options
  */
 
-export const createTemplate = async (options: {
-  name: string;
-  projectType: string;
-  templateName: string;
-  baseUrl?: string;
-}): Promise<void> => {
-  generator.baseOptions.projectName = options.name;
-  generator.baseOptions.templateType = options.projectType;
-  generator.templateName = options.templateName;
-  if (options.baseUrl) {
-    generator.baseOptions.baseUrl = options.baseUrl;
-  }
-  await onInit(generator);
-
+export const createTemplate = async (
+  options: createProjectInterface
+): Promise<void> => {
+  await initProject(options);
   // 检查 node 版本
-  const packageJson = generator.pkg;
+  const packageJson = generator.getPackageJson();
   const requiredNodeVersion = packageJson.engines?.node;
   const requiredNpmVersion = packageJson.engines?.npm;
   if (requiredNodeVersion) {
@@ -71,38 +88,42 @@ export const createTemplate = async (options: {
       }
     },
     onRenderEnd: () => {
-      console.log(
-        chalk.green(`项目创建成功: ${generator.baseOptions.projectName}`)
-      );
+      const baseOptions = generator.getBaseOptions();
+      console.log(chalk.green(`项目创建成功: ${baseOptions.projectName}`));
       spinner.text = "正在安装依赖，请稍候...";
-      const base = `${generator.baseOptions.baseUrl}/${generator.baseOptions.projectName}`;
+      const base = `${baseOptions.baseUrl}/${baseOptions.projectName}`;
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      exec(`cd ${base} && npm install`, (error, _stdout, _stderr) => {
-        if (error) {
-          console.error(`执行 npm i 时出错: ${error.message}`);
-          spinner.stop();
-          console.log(`
+      exec(
+        `cd ${base} && ${baseOptions.packageManager} install`,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        (error, _stdout, _stderr) => {
+          if (error) {
+            console.error(
+              `执行 ${baseOptions.packageManager} i 时出错: ${error.message}`
+            );
+            spinner.stop();
+            console.log(`
             ✨ 项目创建成功！请手动安装依赖
-              cd ${generator.baseOptions.projectName}
-              npm install
-              npm run dev
+              cd ${baseOptions.projectName}
+              ${baseOptions.packageManager} install
+              ${baseOptions.packageManager} run dev
               `);
-          return;
-        }
-        // if (stderr) {
-        //   console.error(`stderr: ${stderr}`);
-        //   spinner.stop();
-        //   return;
-        // }
-        spinner.stop();
-        process.stdout.write("\r依赖安装完成。          \n");
-        console.log(`
+            return;
+          }
+          // if (stderr) {
+          //   console.error(`stderr: ${stderr}`);
+          //   spinner.stop();
+          //   return;
+          // }
+          spinner.stop();
+          process.stdout.write("\r依赖安装完成。          \n");
+          console.log(`
             ✨ 项目创建成功！
-              cd ${generator.baseOptions.projectName}
-              npm run dev
+              cd ${baseOptions.projectName}
+              ${baseOptions.packageManager} run dev
               `);
-      });
+        }
+      );
     }
   });
 };
@@ -114,13 +135,14 @@ export const createTemplate = async (options: {
  */
 const create = async (_projectName: string): Promise<void> => {
   let projectName = _projectName;
+  const baseOptions = generator.getBaseOptions();
   if (!_projectName) {
     const { name } = await inquirer.prompt([
       {
         name: "name",
         type: "input",
         message: "请输入项目名称:",
-        default: generator.baseOptions.projectName
+        default: baseOptions.projectName
       }
     ]);
     projectName = name;
@@ -140,8 +162,8 @@ const create = async (_projectName: string): Promise<void> => {
     process.exit(1);
   }
 
-  const cwd = generator.baseOptions.baseUrl;
-  generator.baseOptions.projectName = projectName;
+  const cwd = baseOptions.baseUrl;
+  baseOptions.projectName = projectName;
 
   const targetDir = path.resolve(cwd, projectName || ".");
   if (fs.existsSync(targetDir)) {
@@ -154,7 +176,7 @@ const create = async (_projectName: string): Promise<void> => {
     {
       name: "projectType",
       type: "list",
-      default: generator.baseOptions.templateType,
+      default: baseOptions.templateType,
       message: "请选择创建项目类型",
       choices: types.map(type => ({ name: type, value: type }))
     }
@@ -169,6 +191,8 @@ const create = async (_projectName: string): Promise<void> => {
       choices: templates.map(template => ({ name: template, value: template }))
     }
   ]);
+
+  generator.setBaseOptions(baseOptions);
 
   createTemplate({
     name: projectName,

@@ -4,7 +4,10 @@
     <div class="main-content">
       <div class="header">
         <div class="title">项目仪表盘</div>
-        <el-button type="success" class="custom-button">
+        <el-button
+          type="success"
+          class="custom-button"
+        >
           <el-icon><Plus /></el-icon>
           自定义
         </el-button>
@@ -14,23 +17,40 @@
         <div class="welcome-card">
           <div class="title">欢迎</div>
           <div class="welcome-content">
-            <img src="https://vuejs.org/images/logo.png" alt="Vue logo" class="vue-logo" />
+            <img
+              src="https://vuejs.org/images/logo.png"
+              alt="Vue logo"
+              class="vue-logo"
+            />
             <h2>欢迎来到新项目！</h2>
             <div class="description">
               <div class="desc-item">
                 <el-icon><Grid /></el-icon>
-                <p>这里是项目仪表盘，你可以点击右上方的"自定义"按钮来添加部件。你的改动将会自动保存。</p>
+                <p>
+                  这里是项目仪表盘，你可以点击右上方的"自定义"按钮来添加部件。你的改动将会自动保存。
+                </p>
               </div>
               <div class="desc-item">
                 <el-icon><ArrowLeft /></el-icon>
-                <p>左侧是各个管理页面。在「插件」页面可以添加新的 Vue CLI 插件，「依赖」页面用于管理项目的依赖包，「配置」页面用于配置各种工具，「任务」页面用于运行各个脚本（比如 webpack 打包）。</p>
+                <p>
+                  左侧是各个管理页面。在「插件」页面可以添加新的 Vue CLI
+                  插件，「依赖」页面用于管理项目的依赖包，「配置」页面用于配置各种工具，「任务」页面用于运行各个脚本（比如
+                  webpack 打包）。
+                </p>
               </div>
               <div class="desc-item">
                 <el-icon><House /></el-icon>
-                <p>点击左上方的下拉菜单或状态栏上的小房子按钮来返回到项目管理器。</p>
+                <p>
+                  点击左上方的下拉菜单或状态栏上的小房子按钮来返回到项目管理器。
+                </p>
               </div>
             </div>
-            <el-button type="primary" class="understand-btn" @click="handleUnderstand">了解</el-button>
+            <el-button
+              type="primary"
+              class="understand-btn"
+              @click="handleUnderstand"
+              >了解</el-button
+            >
           </div>
         </div>
 
@@ -42,8 +62,15 @@
               准备好终止
             </div>
             <div class="input-group">
-              <el-input v-model="portNumber" placeholder="输入一个网络端口" class="port-input" />
-              <el-button type="success" class="kill-btn">
+              <el-input
+                v-model="portNumber"
+                placeholder="输入一个网络端口"
+                class="port-input"
+              />
+              <el-button
+                type="success"
+                class="kill-btn"
+              >
                 <el-icon><Lightning /></el-icon>
                 终止
               </el-button>
@@ -56,14 +83,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { Plus, Grid, ArrowLeft, House, Lightning } from '@element-plus/icons-vue';
-import ProjectSidebar from '@/components/ProjectSidebar.vue';
+import { ref } from "vue";
+import {
+  Plus,
+  Grid,
+  ArrowLeft,
+  House,
+  Lightning
+} from "@element-plus/icons-vue";
+import ProjectSidebar from "@/components/ProjectSidebar.vue";
 
-const portNumber = ref('');
+const portNumber = ref("");
 
 const handleUnderstand = () => {
-  console.log('了解');
+  console.log("了解");
 };
 </script>
 
@@ -104,7 +137,8 @@ const handleUnderstand = () => {
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 20px;
 
-      .welcome-card, .terminal-card {
+      .welcome-card,
+      .terminal-card {
         background: white;
         border-radius: 8px;
         overflow: hidden;
@@ -231,4 +265,4 @@ const handleUnderstand = () => {
     }
   }
 }
-</style> 
+</style>

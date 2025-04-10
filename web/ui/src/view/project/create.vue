@@ -4,10 +4,16 @@
       <div class="content"><div class="title">创建新项目</div></div>
     </div>
     <div class="tabs">
-      <el-tabs v-model="activeTab" :before-leave="() => false">
+      <el-tabs
+        v-model="activeTab"
+        :before-leave="() => false"
+      >
         <el-tab-pane name="0">
           <template #label>
-            <div class="custom-tab-label" :class="{ active: activeTab === '0' }">
+            <div
+              class="custom-tab-label"
+              :class="{ active: activeTab === '0' }"
+            >
               <el-icon><Memo /></el-icon>
               <span>详情</span>
             </div>
@@ -16,7 +22,10 @@
 
         <el-tab-pane name="1">
           <template #label>
-            <div class="custom-tab-label" :class="{ active: activeTab === '1' }">
+            <div
+              class="custom-tab-label"
+              :class="{ active: activeTab === '1' }"
+            >
               <el-icon><SuccessFilled /></el-icon>
               <span>预设</span>
             </div>
@@ -25,7 +34,10 @@
 
         <el-tab-pane name="2">
           <template #label>
-            <div class="custom-tab-label" :class="{ active: activeTab === '2' }">
+            <div
+              class="custom-tab-label"
+              :class="{ active: activeTab === '2' }"
+            >
               <el-icon><Menu /></el-icon>
               <span>功能</span>
             </div>
@@ -34,7 +46,10 @@
 
         <el-tab-pane name="3">
           <template #label>
-            <div class="custom-tab-label" :class="{ active: activeTab === '3' }">
+            <div
+              class="custom-tab-label"
+              :class="{ active: activeTab === '3' }"
+            >
               <el-icon><Setting /></el-icon>
               <span>配置</span>
             </div>
@@ -43,9 +58,12 @@
       </el-tabs>
     </div>
     <div class="page-content">
-      <CreateProjectDetail v-if="activeTab === '0'" @next="handleNext" />
-      <CreateProjectPresets 
-        v-if="activeTab === '1'" 
+      <CreateProjectDetail
+        v-if="activeTab === '0'"
+        @next="handleNext"
+      />
+      <CreateProjectPresets
+        v-if="activeTab === '1'"
         @prev="handlePrev"
         @create="handleCreate"
       />
@@ -55,28 +73,28 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import CreateProjectDetail from '@/components/CreateProjectDetail.vue'
-import CreateProjectPresets from '@/components/CreateProjectPresets.vue'
+import CreateProjectDetail from "@/components/CreateProjectDetail.vue";
+import CreateProjectPresets from "@/components/CreateProjectPresets.vue";
 import { Memo, SuccessFilled, Menu, Setting } from "@element-plus/icons-vue";
-import { ElMessage } from 'element-plus';
-import { useRouter } from 'vue-router';
+import { ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
 
-const activeTab = ref('0');
+const activeTab = ref("0");
 const router = useRouter();
-const projectName = ref('');
+const projectName = ref("");
 
 const handlePrev = () => {
-  activeTab.value = '0';
+  activeTab.value = "0";
 };
 
 const handleCreate = (data: { preset: string }) => {
-  console.log('Selected preset:', data.preset);
-  ElMessage.success('项目创建成功！');
+  console.log("Selected preset:", data.preset);
+  ElMessage.success("项目创建成功！");
   router.push(`/project/${projectName.value}/dashboard`);
 };
 
 const handleNext = (e: number, name: string) => {
-  console.log('Next tab:', e);
+  console.log("Next tab:", e);
   projectName.value = name;
   activeTab.value = String(e + 1);
 };
@@ -143,7 +161,6 @@ const handleNext = (e: number, name: string) => {
 
     :deep(.el-tabs__item) {
       padding: 0;
-      
       &:hover {
         color: inherit;
       }

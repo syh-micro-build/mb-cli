@@ -10,7 +10,9 @@
         </span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item>添加/取消收藏  <el-switch v-model="value1" /></el-dropdown-item>
+            <el-dropdown-item
+              >添加/取消收藏 <el-switch v-model="value1"
+            /></el-dropdown-item>
             <el-dropdown-item>在编辑器中打开</el-dropdown-item>
             <el-dropdown-item>重命名</el-dropdown-item>
             <el-dropdown-item disabled>暂无收藏</el-dropdown-item>
@@ -79,7 +81,7 @@ const route = useRoute();
 const router = useRouter();
 const projectId = route.params.id;
 const currentTab = ref(route.path.split("/").pop() || "dashboard");
-const value1 = ref('');
+const value1 = ref("");
 const handleMenuClick = (tab: string) => {
   currentTab.value = tab;
   router.push(`/project/${projectId}/${tab}`);

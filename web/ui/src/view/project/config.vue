@@ -17,9 +17,16 @@
       </div>
 
       <div class="config-list">
-        <div class="config-item" v-for="config in configs" :key="config.name">
+        <div
+          class="config-item"
+          v-for="config in configs"
+          :key="config.name"
+        >
           <div class="config-icon">
-            <img :src="config.icon" :alt="config.name">
+            <img
+              :src="config.icon"
+              :alt="config.name"
+            />
           </div>
           <div class="config-info">
             <div class="config-name">{{ config.name }}</div>
@@ -32,22 +39,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { Search } from '@element-plus/icons-vue';
-import ProjectSidebar from '@/components/ProjectSidebar.vue';
+import { ref } from "vue";
+import { Search } from "@element-plus/icons-vue";
+import ProjectSidebar from "@/components/ProjectSidebar.vue";
 
-const searchQuery = ref('');
+const searchQuery = ref("");
 
 const configs = ref([
   {
-    name: 'Vue CLI',
-    description: '配置 Vue 项目',
-    icon: 'https://vuejs.org/images/logo.png'
+    name: "Vue CLI",
+    description: "配置 Vue 项目",
+    icon: "https://vuejs.org/images/logo.png"
   },
   {
-    name: 'ESLint configuration',
-    description: '代码质量和规范',
-    icon: 'https://eslint.org/icon.svg'
+    name: "ESLint configuration",
+    description: "代码质量和规范",
+    icon: "https://eslint.org/icon.svg"
   }
 ]);
 </script>
@@ -56,7 +63,6 @@ const configs = ref([
 .project-layout {
   display: flex;
   min-height: 100vh;
-  
   .main-content {
     flex: 1;
     padding: 20px;
@@ -102,7 +108,6 @@ const configs = ref([
         .config-icon {
           width: 40px;
           height: 40px;
-          
           img {
             width: 100%;
             height: 100%;
@@ -128,4 +133,4 @@ const configs = ref([
     }
   }
 }
-</style> 
+</style>

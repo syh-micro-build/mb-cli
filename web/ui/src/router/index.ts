@@ -1,55 +1,57 @@
-import Home from '@/view/home/index.vue';
-import ProjectCreate from '@/view/project/create.vue';
-import ProjectDashboard from '@/view/project/dashboard.vue';
-import ProjectPlugins from '@/view/project/plugins.vue';
-import ProjectConfig from '@/view/project/config.vue';
-import ProjectTasks from '@/view/project/tasks.vue';
-import { createRouter, createWebHistory } from 'vue-router';
+import Home from "@/view/home/index.vue";
+import ProjectConfig from "@/view/project/config.vue";
+import ProjectCreate from "@/view/project/create.vue";
+import ProjectDashboard from "@/view/project/dashboard.vue";
+import Dependencies from "@/view/project/dependencies.vue";
+import ProjectPlugins from "@/view/project/plugins.vue";
+import TaskDetail from "@/view/project/task-detail.vue";
+import ProjectTasks from "@/view/project/tasks.vue";
+import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: '/',
-      name: 'home',
+      path: "/",
+      name: "home",
       component: Home
     },
     {
-      path: '/project/create',
-      name: 'project-create',
+      path: "/project/create",
+      name: "project-create",
       component: ProjectCreate
     },
     {
-      path: '/project/:id/dashboard',
-      name: 'project-dashboard',
+      path: "/project/:id/dashboard",
+      name: "project-dashboard",
       component: ProjectDashboard
     },
     {
-      path: '/project/:id/plugins',
-      name: 'project-plugins',
+      path: "/project/:id/plugins",
+      name: "project-plugins",
       component: ProjectPlugins
     },
     {
-      path: '/project/:id/dependencies',
-      name: 'project-dependencies',
-      component: () => import('@/view/project/dependencies.vue')
+      path: "/project/:id/dependencies",
+      name: "project-dependencies",
+      component: Dependencies
     },
     {
-      path: '/project/:id/config',
-      name: 'project-config',
+      path: "/project/:id/config",
+      name: "project-config",
       component: ProjectConfig
     },
     {
-      path: '/project/:id/tasks',
-      name: 'project-tasks',
+      path: "/project/:id/tasks",
+      name: "project-tasks",
       component: ProjectTasks
     },
     {
-      path: '/project/:id/tasks/:taskId',
-      name: 'task-detail',
-      component: () => import('@/view/project/task-detail.vue')
+      path: "/project/:id/tasks/:taskId",
+      name: "task-detail",
+      component: TaskDetail
     }
   ]
-})
+});
 
-export default router 
+export default router;

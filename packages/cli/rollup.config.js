@@ -3,12 +3,17 @@ import typescript from "@rollup/plugin-typescript";
 import { defineConfig } from "rollup";
 
 export default defineConfig({
-  input: "./bin/cli.ts",
+  input: {
+    index: "./bin/cli.ts",
+    create: "./lib/create.ts"
+  },
   output: [
     {
-      file: "dist/index.mjs",
+      dir: "dist",
+      chunkFileNames: "dist/[name].mjs",
       format: "es",
-      sourcemap: true
+      sourcemap: true,
+      banner: "#!/usr/bin/env node"
     }
   ],
   plugins: [

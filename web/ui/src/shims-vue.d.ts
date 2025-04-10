@@ -1,15 +1,15 @@
-declare module '*.vue' {
-  import type { DefineComponent } from 'vue';
-  const component: DefineComponent<{}, {}, any>;
+declare module "*.vue" {
+  import type { DefineComponent } from "vue";
+  const component: DefineComponent<object, object, any>;
   export default component;
 }
 
-declare module '*.css' {
+declare module "*.css" {
   const content: any;
   export default content;
 }
 
-declare module '*.scss' {
+declare module "*.scss" {
   const content: any;
   export default content;
-} 
+}

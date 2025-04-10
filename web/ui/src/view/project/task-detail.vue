@@ -51,11 +51,15 @@
           <div class="stats-row">
             <div class="stats-item">
               <div class="label">资源</div>
-              <div class="value">0.0kB <span class="sub-text">(解析)</span></div>
+              <div class="value">
+                0.0kB <span class="sub-text">(解析)</span>
+              </div>
             </div>
             <div class="stats-item">
               <div class="label">模块</div>
-              <div class="value">0.0kB <span class="sub-text">(解析)</span></div>
+              <div class="value">
+                0.0kB <span class="sub-text">(解析)</span>
+              </div>
             </div>
             <div class="stats-item">
               <div class="label">依赖项</div>
@@ -85,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { Box, Document, Monitor, Setting } from '@element-plus/icons-vue';
+import { Box, Document, Monitor, Setting } from "@element-plus/icons-vue";
 </script>
 
 <style scoped lang="scss">
@@ -93,7 +97,6 @@ import { Box, Document, Monitor, Setting } from '@element-plus/icons-vue';
   flex: 1;
   display: flex;
   min-height: 100vh;
-  
   .main-content {
     flex: 1;
     padding: 20px;
@@ -250,4 +253,4 @@ import { Box, Document, Monitor, Setting } from '@element-plus/icons-vue';
     }
   }
 }
-</style> 
+</style>

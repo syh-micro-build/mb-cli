@@ -25,7 +25,7 @@
   </el-dialog>
 </template>
 <script setup lang="ts">
-import {defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits } from "vue";
 const emits = defineEmits(["update:dialogVisible"]);
 const props = defineProps<{
   dialogData: {
@@ -39,7 +39,7 @@ const props = defineProps<{
 console.log("props", props);
 
 const openDoc = () => {
-    window.open(props.dialogData.url)
+  window.open(props.dialogData.url);
 };
 
 const handleNext = () => {

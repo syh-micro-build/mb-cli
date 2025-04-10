@@ -1,11 +1,19 @@
 <template>
   <div class="project-config">
-    <el-form :model="form" label-position="top" :rules="rules" ref="formRef">
+    <el-form
+      :model="form"
+      label-position="top"
+      :rules="rules"
+      ref="formRef"
+    >
       <!-- 项目文件夹 -->
       <div class="form-section">
         <h3 class="section-title">项目文件夹</h3>
         <el-form-item prop="projectName">
-          <el-input v-model="form.projectName" class="folder-input">
+          <el-input
+            v-model="form.projectName"
+            class="folder-input"
+          >
             <template #prepend>
               <el-icon><Folder /></el-icon>
             </template>
@@ -13,18 +21,39 @@
         </el-form-item>
         <div class="path-display">
           <span class="path-text">{{ basePath }}</span>
-          <el-button type="primary" link :icon="EditPen" @click="handleEditPath">编辑</el-button>
+          <el-button
+            type="primary"
+            link
+            :icon="EditPen"
+            @click="handleEditPath"
+            >编辑</el-button
+          >
         </div>
       </div>
 
       <!-- 包管理器 -->
       <div class="form-section">
         <h3 class="section-title">包管理器</h3>
-        <el-select v-model="form.packageManager" class="package-select">
-          <el-option label="默认" value="default" />
-          <el-option label="npm" value="npm" />
-          <el-option label="yarn" value="yarn" />
-          <el-option label="pnpm" value="pnpm" />
+        <el-select
+          v-model="form.packageManager"
+          class="package-select"
+        >
+          <el-option
+            label="默认"
+            value="default"
+          />
+          <el-option
+            label="npm"
+            value="npm"
+          />
+          <el-option
+            label="yarn"
+            value="yarn"
+          />
+          <el-option
+            label="pnpm"
+            value="pnpm"
+          />
         </el-select>
       </div>
 
@@ -66,41 +95,49 @@
       <!-- 操作按钮 -->
       <div class="form-actions">
         <el-button @click="handleCancel">取消</el-button>
-        <el-button type="primary" @click="handleNext">下一步</el-button>
+        <el-button
+          type="primary"
+          @click="handleNext"
+          >下一步</el-button
+        >
       </div>
     </el-form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, defineEmits } from 'vue';
-import { useRouter } from 'vue-router';
-import { Folder, EditPen } from '@element-plus/icons-vue';
-import type { FormInstance } from 'element-plus';
+import { ref, reactive, defineEmits } from "vue";
+import { useRouter } from "vue-router";
+import { Folder, EditPen } from "@element-plus/icons-vue";
+import type { FormInstance } from "element-plus";
 
 const router = useRouter();
 const formRef = ref<FormInstance>();
-const basePath = ref('/Users/liyuhui/');
-const emit = defineEmits(['next'])
+const basePath = ref("/Users/liyuhui/");
+const emit = defineEmits(["next"]);
 const form = reactive({
-  projectName: '',
-  packageManager: 'default',
+  projectName: "",
+  packageManager: "default",
   overwrite: false,
   noGuide: false,
   initGit: true,
-  commitMessage: ''
+  commitMessage: ""
 });
 
 const rules = {
   projectName: [
-    { required: true, message: '请输入项目名称', trigger: 'blur' },
-    { pattern: /^[a-zA-Z0-9-_]+$/, message: '项目名称只能包含字母、数字、连字符和下划线', trigger: 'blur' }
+    { required: true, message: "请输入项目名称", trigger: "blur" },
+    {
+      pattern: /^[a-zA-Z0-9-_]+$/,
+      message: "项目名称只能包含字母、数字、连字符和下划线",
+      trigger: "blur"
+    }
   ]
 };
 
 const handleEditPath = () => {
   // TODO: 实现路径编辑功能
-  console.log('编辑路径');
+  console.log("编辑路径");
 };
 
 const handleCancel = () => {
@@ -109,12 +146,12 @@ const handleCancel = () => {
 
 const handleNext = async () => {
   if (!formRef.value) return;
-  
+
   try {
     await formRef.value.validate();
-    emit('next', 0, form.projectName);
+    emit("next", 0, form.projectName);
   } catch (error) {
-    console.error('表单验证失败：', error);
+    console.error("表单验证失败：", error);
   }
 };
 </script>

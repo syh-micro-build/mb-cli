@@ -34,7 +34,6 @@ const activeTab = ref("projects");
         </el-tab-pane>
       </el-tabs>
     </div>
-   
     <create v-if="activeTab === 'create'" />
   </div>
 </template>
@@ -53,14 +52,14 @@ const activeTab = ref("projects");
 }
 
 .tabs {
-    height: 44px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #c8ebdf;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #c8ebdf;
 }
 
-.tabs span{
+.tabs span {
   display: flex;
   align-items: center;
   gap: 4px;

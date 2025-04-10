@@ -15,7 +15,10 @@
               <el-icon><Search /></el-icon>
             </template>
           </el-input>
-          <el-button type="success" class="add-btn">
+          <el-button
+            type="success"
+            class="add-btn"
+          >
             <el-icon><Plus /></el-icon>
             安装依赖
           </el-button>
@@ -27,9 +30,16 @@
           <div class="title">运行依赖</div>
         </div>
         <div class="dependencies-list">
-          <div class="dependency-item" v-for="dep in runDependencies" :key="dep.name">
+          <div
+            class="dependency-item"
+            v-for="dep in runDependencies"
+            :key="dep.name"
+          >
             <div class="dep-icon">
-              <img :src="dep.icon" :alt="dep.name">
+              <img
+                :src="dep.icon"
+                :alt="dep.name"
+              />
             </div>
             <div class="dep-info">
               <div class="dep-name">{{ dep.name }}</div>
@@ -37,7 +47,12 @@
                 <span class="version">版本 {{ dep.version }}</span>
                 <span class="required">要求 {{ dep.required }}</span>
                 <span class="latest">最新 {{ dep.latest }}</span>
-                <el-button link type="primary" class="details-link">查看详情</el-button>
+                <el-button
+                  link
+                  type="primary"
+                  class="details-link"
+                  >查看详情</el-button
+                >
                 <el-button class="delete-btn">
                   <el-icon><Delete /></el-icon>
                 </el-button>
@@ -50,9 +65,16 @@
           <div class="title">开发依赖</div>
         </div>
         <div class="dependencies-list">
-          <div class="dependency-item" v-for="dep in devDependencies" :key="dep.name">
+          <div
+            class="dependency-item"
+            v-for="dep in devDependencies"
+            :key="dep.name"
+          >
             <div class="dep-icon">
-              <img :src="dep.icon" :alt="dep.name">
+              <img
+                :src="dep.icon"
+                :alt="dep.name"
+              />
             </div>
             <div class="dep-info">
               <div class="dep-name">{{ dep.name }}</div>
@@ -60,7 +82,12 @@
                 <span class="version">版本 {{ dep.version }}</span>
                 <span class="required">要求 {{ dep.required }}</span>
                 <span class="latest">最新 {{ dep.latest }}</span>
-                <el-button link type="primary" class="details-link">查看详情</el-button>
+                <el-button
+                  link
+                  type="primary"
+                  class="details-link"
+                  >查看详情</el-button
+                >
                 <el-button class="delete-btn">
                   <el-icon><Delete /></el-icon>
                 </el-button>
@@ -74,57 +101,57 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { Search, Plus, Delete } from '@element-plus/icons-vue';
-import ProjectSidebar from '@/components/ProjectSidebar.vue';
+import { ref } from "vue";
+import { Search, Plus, Delete } from "@element-plus/icons-vue";
+import ProjectSidebar from "@/components/ProjectSidebar.vue";
 
-const searchQuery = ref('');
+const searchQuery = ref("");
 
 const runDependencies = ref([
   {
-    name: 'core-js',
-    version: '3.40.0',
-    required: '3.40.0',
-    latest: '3.40.0',
-    icon: 'https://avatars.githubusercontent.com/u/3622532?s=48'
+    name: "core-js",
+    version: "3.40.0",
+    required: "3.40.0",
+    latest: "3.40.0",
+    icon: "https://avatars.githubusercontent.com/u/3622532?s=48"
   },
   {
-    name: 'vue',
-    version: '3.5.13',
-    required: '3.5.13',
-    latest: '3.5.13',
-    icon: 'https://vuejs.org/images/logo.png'
+    name: "vue",
+    version: "3.5.13",
+    required: "3.5.13",
+    latest: "3.5.13",
+    icon: "https://vuejs.org/images/logo.png"
   }
 ]);
 
 const devDependencies = ref([
   {
-    name: '@babel/core',
-    version: '7.26.9',
-    required: '7.26.9',
-    latest: '7.26.9',
-    icon: 'https://raw.githubusercontent.com/babel/logo/master/babel.png'
+    name: "@babel/core",
+    version: "7.26.9",
+    required: "7.26.9",
+    latest: "7.26.9",
+    icon: "https://raw.githubusercontent.com/babel/logo/master/babel.png"
   },
   {
-    name: '@babel/eslint-parser',
-    version: '7.26.8',
-    required: '7.26.8',
-    latest: '7.26.8',
-    icon: 'https://raw.githubusercontent.com/babel/logo/master/babel.png'
+    name: "@babel/eslint-parser",
+    version: "7.26.8",
+    required: "7.26.8",
+    latest: "7.26.8",
+    icon: "https://raw.githubusercontent.com/babel/logo/master/babel.png"
   },
   {
-    name: 'eslint',
-    version: '7.32.0',
-    required: '7.32.0',
-    latest: '9.21.0',
-    icon: 'https://eslint.org/icon.svg'
+    name: "eslint",
+    version: "7.32.0",
+    required: "7.32.0",
+    latest: "9.21.0",
+    icon: "https://eslint.org/icon.svg"
   },
   {
-    name: 'eslint-plugin-vue',
-    version: '8.7.1',
-    required: '8.7.1',
-    latest: '9.32.0',
-    icon: 'https://eslint.org/icon.svg'
+    name: "eslint-plugin-vue",
+    version: "8.7.1",
+    required: "8.7.1",
+    latest: "9.32.0",
+    icon: "https://eslint.org/icon.svg"
   }
 ]);
 </script>
@@ -133,7 +160,6 @@ const devDependencies = ref([
 .project-layout {
   display: flex;
   min-height: 100vh;
-  
   .main-content {
     flex: 1;
     padding: 20px;
@@ -206,7 +232,6 @@ const devDependencies = ref([
           .dep-icon {
             width: 32px;
             height: 32px;
-            
             img {
               width: 100%;
               height: 100%;
@@ -230,7 +255,9 @@ const devDependencies = ref([
               color: #999;
               font-size: 13px;
 
-              .version, .required, .latest {
+              .version,
+              .required,
+              .latest {
                 color: #999;
               }
 
@@ -259,4 +286,4 @@ const devDependencies = ref([
     }
   }
 }
-</style> 
+</style>

@@ -2,7 +2,6 @@
   <div class="project-layout">
     <ProjectSidebar />
     <div class="main-content">
-      
       <div class="header">
         <div class="title">插件</div>
         <div class="header-actions">
@@ -40,7 +39,10 @@
         </div>
       </div>
 
-      <div class="plugins-section" v-if="!isShowADDPluginContent">
+      <div
+        class="plugins-section"
+        v-if="!isShowADDPluginContent"
+      >
         <div class="section-title">已安装的插件</div>
         <div class="plugins-list">
           <div
@@ -79,11 +81,12 @@
         </div>
       </div>
 
-      <AddpluginDetail v-if="isShowADDPluginContent" @close="closeAddPluginContent" />
-
+      <AddpluginDetail
+        v-if="isShowADDPluginContent"
+        @close="closeAddPluginContent"
+      />
     </div>
-    <AddPluginDialog :dialogData="dialogData"/>
-   
+    <AddPluginDialog :dialogData="dialogData" />
   </div>
 </template>
 
@@ -123,49 +126,43 @@ const installedPlugins = ref([
 ]);
 
 const dialogData = ref({
-  title: '',
-  content: '',
+  title: "",
+  content: "",
   dialogVisible: false,
-  key: '',
-  url: ''
-})
+  key: "",
+  url: ""
+});
 
 const handleAddVueRouter = () => {
   addVueRouteDialogVisible.value = true;
   dialogData.value.title = "添加 Vue Router";
   dialogData.value.content = "官方SPA管理库";
   dialogData.value.dialogVisible = true;
-  dialogData.value.key = 'router';
-  dialogData.value.url = 'https://router.vuejs.org/'
+  dialogData.value.key = "router";
+  dialogData.value.url = "https://router.vuejs.org/";
 };
-
-
 
 const handleAddVuex = () => {
   addVueRouteDialogVisible.value = true;
   dialogData.value.title = "添加 vuex";
   dialogData.value.content = "官方状态管理库";
   dialogData.value.dialogVisible = true;
-  dialogData.value.key = 'vuex';
-  dialogData.value.url = 'https://vuex.vuejs.org/'
+  dialogData.value.key = "vuex";
+  dialogData.value.url = "https://vuex.vuejs.org/";
 };
-
-
 
 const handleAddPlugin = () => {
   console.log("添加插件");
-  isShowADDPluginContent.value = true; 
+  isShowADDPluginContent.value = true;
 };
 
 const closeAddPluginContent = () => {
-  isShowADDPluginContent.value = false; 
-}
+  isShowADDPluginContent.value = false;
+};
 
 const handleViewDetails = (plugin: any) => {
   console.log("查看插件详情:", plugin.name);
 };
-
-
 </script>
 
 <style scoped lang="scss">
