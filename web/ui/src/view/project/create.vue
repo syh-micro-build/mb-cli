@@ -161,7 +161,6 @@ const handleNext = (e: number, name: string) => {
 
     :deep(.el-tabs__item) {
       padding: 0;
-
       &:hover {
         color: inherit;
       }

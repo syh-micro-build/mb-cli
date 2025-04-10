@@ -63,7 +63,6 @@ const configs = ref([
 .project-layout {
   display: flex;
   min-height: 100vh;
-
   .main-content {
     flex: 1;
     padding: 20px;
@@ -109,7 +108,6 @@ const configs = ref([
         .config-icon {
           width: 40px;
           height: 40px;
-
           img {
             width: 100%;
             height: 100%;

@@ -160,7 +160,6 @@ const devDependencies = ref([
 .project-layout {
   display: flex;
   min-height: 100vh;
-
   .main-content {
     flex: 1;
     padding: 20px;
@@ -233,7 +232,6 @@ const devDependencies = ref([
           .dep-icon {
             width: 32px;
             height: 32px;
-
             img {
               width: 100%;
               height: 100%;

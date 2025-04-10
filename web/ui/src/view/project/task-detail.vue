@@ -97,7 +97,6 @@ import { Box, Document, Monitor, Setting } from "@element-plus/icons-vue";
   flex: 1;
   display: flex;
   min-height: 100vh;
-
   .main-content {
     flex: 1;
     padding: 20px;
